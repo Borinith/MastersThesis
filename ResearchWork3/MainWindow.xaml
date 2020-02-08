@@ -1,0 +1,414 @@
+﻿<Window x:Class="ResearchWork3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Research work 3" Height="400" Width="600">
+    <Grid x:Name="CommonWindow">
+        <Grid x:Name="GridButtons">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+        </Grid>
+
+        <Grid x:Name="GridSystem">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label
+                Name="SystemName"
+                Visibility="Hidden" />
+
+            <!--#region Концентрация (n)-->
+
+            <Label
+                Content="Концентрация (n):"
+                Name="NText"
+                Height="30"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Grid.Column="0" />
+
+            <Label
+                Content="n min"
+                Name="NMinLabel"
+                Height="30"
+                Width="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="2" />
+
+            <TextBox
+                Name="NMinValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="3" />
+
+            <Label
+                Content="n max"
+                Name="NMaxLabel"
+                Height="30"
+                Width="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="4" />
+
+            <TextBox
+                Name="NMaxValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="5" />
+
+            <Label
+                Content="n step"
+                Name="NStepLabel"
+                Height="30"
+                Width="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="6" />
+
+            <TextBox
+                Name="NStepValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="0"
+                Grid.Column="7" />
+
+            <!--#endregion Концентрация (n)-->
+
+            <!--#region Кинетическая температура (Tkin)-->
+
+            <Label
+                Content="Кинетическая&#x0a;температура (Tkin):"
+                Name="TemperatureKinText"
+                Height="60"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                Grid.Column="0" />
+
+            <Label
+                Content="Tkin min"
+                Name="TemperatureKinMinLabel"
+                Height="30"
+                Width="60"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="2" />
+
+            <TextBox
+                Name="TemperatureKinMinValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="3" />
+
+            <Label
+                Content="Tkin max"
+                Name="TemperatureKinMaxLabel"
+                Height="30"
+                Width="60"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="4" />
+
+            <TextBox
+                Name="TemperatureKinMaxValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="5" />
+
+            <Label
+                Content="Tkin step"
+                Name="TemperatureKinStepLabel"
+                Height="30"
+                Width="60"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="6" />
+
+            <TextBox
+                Name="TemperatureKinStepValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.Column="7" />
+
+            <!--#endregion Кинетическая температура (Tkin)-->
+
+            <!--#region Температура РИ (Tcmb)-->
+
+            <Label
+                Content="Температура&#x0a;РИ (Tcmb):"
+                Name="TemperatureCmbText"
+                Height="60"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="2"
+                Grid.Column="0" />
+
+            <Label
+                Content="Tcmb min"
+                Name="TemperatureCmbMinLabel"
+                Height="30"
+                Width="65"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="2" />
+
+            <TextBox
+                Name="TemperatureCmbMinValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="3" />
+
+            <Label
+                Content="Tcmb max"
+                Name="TemperatureCmbMaxLabel"
+                Height="30"
+                Width="65"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="4" />
+
+            <TextBox
+                Name="TemperatureCmbMaxValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="5" />
+
+            <Label
+                Content="Tcmb step"
+                Name="TemperatureCmbStepLabel"
+                Height="30"
+                Width="65"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="6" />
+
+            <TextBox
+                Name="TemperatureCmbStepValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="2"
+                Grid.Column="7" />
+
+            <!--#endregion Температура РИ (Tcmb)-->
+
+            <!--#region Лучевая концентрация (N0)-->
+
+            <Label
+                Content="Лучевая&#x0a;концентрация (N0):"
+                Name="N0Text"
+                Height="60"
+                Width="120"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="3"
+                Grid.Column="0" />
+
+            <Label
+                Content="N0 min"
+                Name="N0MinLabel"
+                Height="30"
+                Width="55"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="2" />
+
+            <TextBox
+                Name="N0MinValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="3" />
+
+            <Label
+                Content="N0 max"
+                Name="N0MaxLabel"
+                Height="30"
+                Width="55"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="4" />
+
+            <TextBox
+                Name="N0MaxValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="5" />
+
+            <Label
+                Content="N0 step"
+                Name="N0StepLabel"
+                Height="30"
+                Width="55"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="6" />
+
+            <TextBox
+                Name="N0StepValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Row="3"
+                Grid.Column="7" />
+
+            <!--#endregion Лучевая концентрация (N0)-->
+
+            <!--#region Количество уровней и имя файла-->
+
+            <Grid
+                Grid.ColumnSpan="8"
+                Grid.Row="5"
+                Grid.Column="0">
+
+                <ProgressBar
+                    Name="PbStatus"
+                    Minimum="0"
+                    Maximum="100"
+                    Height="25"
+                    VerticalAlignment="Bottom" />
+
+                <TextBlock
+                    Text="{Binding ElementName=PbStatus, Path=Value, StringFormat={}{0:0.0}%}"
+                    Height="21"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom" />
+
+                <Label
+                    Content="{Binding Event.TimeLeft}"
+                    Name="TbTime"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Width="65"
+                    Height="28" />
+            </Grid>
+
+            <Label
+                Content="Количество&#x0a;уровней:"
+                Name="NLevelsText"
+                Height="60"
+                Width="100"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="4"
+                Grid.Column="0" />
+
+            <toolkit:IntegerUpDown
+                Name="NLevelsValue"
+                Height="20"
+                Width="50"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Increment="1"
+                Minimum="2"
+                Grid.ColumnSpan="2"
+                Grid.Row="4"
+                Grid.Column="2" />
+
+            <Label
+                Content="Имя файла:"
+                Name="FileNameText"
+                Height="30"
+                Width="90"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                Grid.Row="4"
+                Grid.Column="3" />
+
+            <TextBox
+                Name="FileNameValue"
+                Height="20"
+                Width="200"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="3"
+                Grid.Row="4"
+                Grid.Column="5" />
+
+            <!--#endregion Количество уровней и имя файла-->
+        </Grid>
+    </Grid>
+</Window>
