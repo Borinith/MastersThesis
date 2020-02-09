@@ -314,6 +314,19 @@ namespace ResearchWork3
             }
 
             #endregion Количество уровней и имя файла
+
+            #region Обнуление прогресс бара и времени выполнения
+
+            var progress = new Progress<double>(s => PbStatus.Value = s);
+            var stopProgress = (IProgress<double>)progress;
+
+            var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(@"d\ hh\:mm\:ss"));
+            var timeStopProgress = (IProgress<TimeSpan>)timeProgress;
+
+            stopProgress.Report(0);
+            timeStopProgress.Report(new TimeSpan(0));
+
+            #endregion Обнуление прогресс бара и времени выполнения
         }
 
         private async void ButtonSystemClickAsync(object sender, RoutedEventArgs e)
@@ -331,13 +344,10 @@ namespace ResearchWork3
             var stopProgress = (IProgress<double>)progress;
 
             var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(@"d\ hh\:mm\:ss"));
-            var timeStopProgress = (IProgress<TimeSpan>)timeProgress;
 
             switch (senderButton?.Content.ToString())
             {
                 case "Start":
-                    stopProgress.Report(0);
-
                     ParametersOfSystem(newInputParameters, false);
                     ButtonsStartStopAndBack(Buttons(), false);
 
@@ -356,7 +366,6 @@ namespace ResearchWork3
                         ButtonsStartStopAndBack(Buttons(), true);
 
                         stopProgress.Report(100);
-                        timeStopProgress.Report(new TimeSpan(0));
                     }
 
                     break;
@@ -365,9 +374,6 @@ namespace ResearchWork3
                     _cancellationTokenSource.Cancel();
                     CommonWindow.Children.Clear();
 
-                    stopProgress.Report(0);
-                    timeStopProgress.Report(new TimeSpan(0));
-
                     ParametersOfSystem(newInputParameters, true);
                     ButtonsStartStopAndBack(Buttons(), true);
 
@@ -375,7 +381,6 @@ namespace ResearchWork3
 
                 case "Back":
                     CommonWindow.Children.Clear();
-                    stopProgress.Report(0);
                     CreateButtons();
 
                     break;
