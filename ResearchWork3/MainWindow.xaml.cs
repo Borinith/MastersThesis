@@ -368,6 +368,8 @@ namespace ResearchWork3
                         stopProgress.Report(100);
                     }
 
+                    _cancellationTokenSource?.Dispose();
+
                     break;
 
                 case "Stop":
@@ -376,6 +378,8 @@ namespace ResearchWork3
 
                     ParametersOfSystem(newInputParameters, true);
                     ButtonsStartStopAndBack(Buttons(), true);
+
+                    _cancellationTokenSource?.Dispose();
 
                     break;
 
