@@ -14,9 +14,6 @@ namespace ResearchWork3.Input
         public const double Alpha = 0.083;
         public const int MaxCoLevel = 14;
 
-        public static double G(int j)
-        {
-            return 2 * j + 1;
-        }
+        public static double G(int j) => 2 * j + 1;
     }
 }

@@ -6,7 +6,7 @@ namespace ResearchWork3.Input
     public class DictionaryOfSystems : InputParametersOfSystem
     {
         private readonly Dictionary<string, InputParametersOfSystem> _systems =
-            new Dictionary<string, InputParametersOfSystem>
+            new()
             {
                 {
                     "SDSS J1439+1117", new InputParametersOfSystem

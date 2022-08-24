@@ -1,4 +1,6 @@
-﻿namespace ResearchWork3.Input
+﻿using System.Linq;
+
+namespace ResearchWork3.Input
 {
     public class InitialData
     {
@@ -8,8 +10,8 @@
         {
             InputParameters = inputParameters;
 
-            _bb = new double[InputParameters.NumberOfLevels + 1];
-            GetBb()[InputParameters.NumberOfLevels] = 1;
+            _bb = Enumerable.Repeat(0d, InputParameters.NumberOfLevels + 1).ToArray();
+            _bb[InputParameters.NumberOfLevels] = 1;
         }
 
         public InputParametersOfSystem InputParameters { get; }
