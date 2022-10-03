@@ -1,4 +1,5 @@
 ﻿using ResearchWork3.Input;
+using System;
 
 namespace ResearchWork3.Calculation_CO
 {
@@ -6,27 +7,41 @@ namespace ResearchWork3.Calculation_CO
     {
         //----------------------------------------Calculation CO levels----------------------------------------
 
-        public readonly double[][] TabCoCoeff;
+        private static readonly Lazy<CalculationCoLevels> Lazy = new(() => new CalculationCoLevels());
+
+        private double[][] _tabCoCoeff;
 
         public CalculationCoLevels()
         {
+            Init();
+        }
+
+        public static CalculationCoLevels Instance => Lazy.Value;
+
+        private void Init()
+        {
             var chCoCoeff = 0;
 
-            TabCoCoeff = new double[InputCommonParameters.MaxCoLevel * (InputCommonParameters.MaxCoLevel + 1) / 2][];
+            _tabCoCoeff = new double[InputCommonParameters.MAX_CO_LEVEL * (InputCommonParameters.MAX_CO_LEVEL + 1) / 2][];
 
-            for (var i = 1; i <= InputCommonParameters.MaxCoLevel; i++)
+            for (var i = 1; i <= InputCommonParameters.MAX_CO_LEVEL; i++)
             {
                 for (var j = i - 1; j >= 0; j--)
                 {
-                    TabCoCoeff[i + chCoCoeff - 1] = new double[2];
+                    _tabCoCoeff[i + chCoCoeff - 1] = new double[2];
 
-                    TabCoCoeff[i + chCoCoeff - 1][0] = i;
-                    TabCoCoeff[i + chCoCoeff - 1][1] = j;
+                    _tabCoCoeff[i + chCoCoeff - 1][0] = i;
+                    _tabCoCoeff[i + chCoCoeff - 1][1] = j;
                     chCoCoeff++;
                 }
 
                 chCoCoeff--;
             }
+        }
+
+        public double[][] GetTabCoCoeff()
+        {
+            return _tabCoCoeff;
         }
     }
 }

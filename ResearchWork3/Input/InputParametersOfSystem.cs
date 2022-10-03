@@ -17,47 +17,47 @@
 
         public double F { get; set; }
 
-        public double TemperatureKinPr { get; set; }
+        public decimal TemperatureKinPr { get; set; }
 
-        public double DTemperatureKinMin { get; set; }
+        public decimal DTemperatureKinMin { get; set; }
 
-        public double DTemperatureKinMax { get; set; }
+        public decimal DTemperatureKinMax { get; set; }
 
-        public double NPr { get; set; }
+        public decimal NPr { get; set; }
 
-        public double DnMin { get; set; }
+        public decimal DnMin { get; set; }
 
-        public double DnMax { get; set; }
+        public decimal DnMax { get; set; }
 
-        public double NMin { get; set; }
+        public decimal NMin { get; set; }
 
-        public double NMax { get; set; }
+        public decimal NMax { get; set; }
 
-        public double NStep { get; set; }
+        public decimal NStep { get; set; }
 
         public int NRound { get; set; }
 
-        public double TemperatureKinMin { get; set; }
+        public decimal TemperatureKinMin { get; set; }
 
-        public double TemperatureKinMax { get; set; }
+        public decimal TemperatureKinMax { get; set; }
 
-        public double TemperatureKinStep { get; set; }
+        public decimal TemperatureKinStep { get; set; }
 
         public int TemperatureKinRound { get; set; }
 
-        public double TemperatureCmbMin { get; set; }
+        public decimal TemperatureCmbMin { get; set; }
 
-        public double TemperatureCmbMax { get; set; }
+        public decimal TemperatureCmbMax { get; set; }
 
-        public double TemperatureCmbStep { get; set; }
+        public decimal TemperatureCmbStep { get; set; }
 
         public int TemperatureCmbRound { get; set; }
 
-        public double N0Min { get; set; }
+        public decimal N0Min { get; set; }
 
-        public double N0Max { get; set; }
+        public decimal N0Max { get; set; }
 
-        public double N0Step { get; set; }
+        public decimal N0Step { get; set; }
 
         public int N0Round { get; set; }
     }

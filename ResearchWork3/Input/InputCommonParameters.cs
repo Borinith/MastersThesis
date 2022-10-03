@@ -4,16 +4,18 @@ namespace ResearchWork3.Input
 {
     public static class InputCommonParameters
     {
-        public const double Hbar = 6.62607015E-27 / (2 * Math.PI); // erg*s
-        public const double Kb = 1.380649E-16; // erg/K
+        public const double HBAR = 6.62607015E-27 / (2 * Math.PI); // erg*s
+        public const double KB = 1.380649E-16; // erg/K
         public const long C = 29979245800; // cm/s
 
-        // ReSharper disable once InconsistentNaming
-        public const double iii = Hbar * Hbar / (2 * 85.4 * Kb);
+        public const double III = HBAR * HBAR / (2 * 85.4 * KB);
 
-        public const double Alpha = 0.083;
-        public const int MaxCoLevel = 14;
+        public const double ALPHA = 0.083;
+        public const int MAX_CO_LEVEL = 14;
 
-        public static double G(int j) => 2 * j + 1;
+        public static double G(int j)
+        {
+            return 2 * j + 1;
+        }
     }
 }

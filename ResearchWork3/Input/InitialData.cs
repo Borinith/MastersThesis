@@ -1,24 +1,31 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace ResearchWork3.Input
 {
     public class InitialData
     {
-        private readonly double[] _bb;
+        private static Lazy<double[]> _b;
 
-        public InitialData(InputParametersOfSystem inputParameters)
+        public InitialData(int numberOfLevels)
         {
-            InputParameters = inputParameters;
-
-            _bb = Enumerable.Repeat(0d, InputParameters.NumberOfLevels + 1).ToArray();
-            _bb[InputParameters.NumberOfLevels] = 1;
+            Init(numberOfLevels);
         }
 
-        public InputParametersOfSystem InputParameters { get; }
-
-        public double[] GetBb()
+        private static void Init(int numberOfLevels)
         {
-            return _bb;
+            _b = new Lazy<double[]>(() =>
+            {
+                var b = Enumerable.Repeat(0d, numberOfLevels + 1).ToArray();
+                b[numberOfLevels] = 1;
+
+                return b;
+            });
+        }
+
+        public static double[] GetB()
+        {
+            return _b.Value;
         }
     }
 }

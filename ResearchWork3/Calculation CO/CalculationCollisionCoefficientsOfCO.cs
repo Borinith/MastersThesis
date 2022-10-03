@@ -9,40 +9,47 @@ namespace ResearchWork3.Calculation_CO
     {
         //----------------------Calculation collision coefficients of CO with temperature----------------------
 
-        public readonly CubicSpline[][] CoCoeffminiH;
-        public readonly CubicSpline[][] CoCoeffminiH2Ortho;
-        public readonly CubicSpline[][] CoCoeffminiH2Para;
-        public readonly CubicSpline[][] CoCoeffminiHe;
+        private static readonly Lazy<CalculationCollisionCoefficientsOfCo> Lazy = new(() => new CalculationCollisionCoefficientsOfCo());
+
+        private CubicSpline[][] _coCoeffMiniH;
+        private CubicSpline[][] _coCoeffMiniH2Ortho;
+        private CubicSpline[][] _coCoeffMiniH2Para;
+        private CubicSpline[][] _coCoeffMiniHe;
 
         public CalculationCollisionCoefficientsOfCo()
         {
-            var tabCoCoeff = new CalculationCoLevels();
+            Init();
+        }
 
-            CoCoeffminiH = new CubicSpline[InputCommonParameters.MaxCoLevel + 1][];
-            CoCoeffminiH2Ortho = new CubicSpline[InputCommonParameters.MaxCoLevel + 1][];
-            CoCoeffminiH2Para = new CubicSpline[InputCommonParameters.MaxCoLevel + 1][];
-            CoCoeffminiHe = new CubicSpline[InputCommonParameters.MaxCoLevel + 1][];
+        public static CalculationCollisionCoefficientsOfCo Instance => Lazy.Value;
 
-            for (var i = 0; i <= InputCommonParameters.MaxCoLevel; i++)
+        private void Init()
+        {
+            _coCoeffMiniH = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1][];
+            _coCoeffMiniH2Ortho = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1][];
+            _coCoeffMiniH2Para = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1][];
+            _coCoeffMiniHe = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1][];
+
+            for (var i = 0; i <= InputCommonParameters.MAX_CO_LEVEL; i++)
             {
-                CoCoeffminiH[i] = new CubicSpline[InputCommonParameters.MaxCoLevel + 1];
-                CoCoeffminiH2Ortho[i] = new CubicSpline[InputCommonParameters.MaxCoLevel + 1];
-                CoCoeffminiH2Para[i] = new CubicSpline[InputCommonParameters.MaxCoLevel + 1];
-                CoCoeffminiHe[i] = new CubicSpline[InputCommonParameters.MaxCoLevel + 1];
+                _coCoeffMiniH[i] = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1];
+                _coCoeffMiniH2Ortho[i] = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1];
+                _coCoeffMiniH2Para[i] = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1];
+                _coCoeffMiniHe[i] = new CubicSpline[InputCommonParameters.MAX_CO_LEVEL + 1];
 
-                for (var j = 0; j <= InputCommonParameters.MaxCoLevel; j++)
+                for (var j = 0; j <= InputCommonParameters.MAX_CO_LEVEL; j++)
                 {
-                    CoCoeffminiH[i][j] = CoCoeff(i, j, tabCoCoeff.TabCoCoeff, InputTablesCo.GetH1Table2015(),
-                        InputTablesCo.GetEnergyTable());
+                    _coCoeffMiniH[i][j] = CoCoeff(i, j, CalculationCoLevels.Instance.GetTabCoCoeff(), InputTablesCo.Instance.GetH1Table2015(),
+                        InputTablesCo.Instance.GetEnergyTable());
 
-                    CoCoeffminiH2Ortho[i][j] = CoCoeff(i, j, tabCoCoeff.TabCoCoeff, InputTablesCo.GetH2TableOrtho2010(),
-                        InputTablesCo.GetEnergyTable());
+                    _coCoeffMiniH2Ortho[i][j] = CoCoeff(i, j, CalculationCoLevels.Instance.GetTabCoCoeff(), InputTablesCo.Instance.GetH2TableOrtho2010(),
+                        InputTablesCo.Instance.GetEnergyTable());
 
-                    CoCoeffminiH2Para[i][j] = CoCoeff(i, j, tabCoCoeff.TabCoCoeff, InputTablesCo.GetH2TablePara2010(),
-                        InputTablesCo.GetEnergyTable());
+                    _coCoeffMiniH2Para[i][j] = CoCoeff(i, j, CalculationCoLevels.Instance.GetTabCoCoeff(), InputTablesCo.Instance.GetH2TablePara2010(),
+                        InputTablesCo.Instance.GetEnergyTable());
 
-                    CoCoeffminiHe[i][j] = CoCoeff(i, j, tabCoCoeff.TabCoCoeff, InputTablesCo.GetHeTable2002(),
-                        InputTablesCo.GetEnergyTable());
+                    _coCoeffMiniHe[i][j] = CoCoeff(i, j, CalculationCoLevels.Instance.GetTabCoCoeff(), InputTablesCo.Instance.GetHeTable2002(),
+                        InputTablesCo.Instance.GetEnergyTable());
                 }
             }
         }
@@ -102,10 +109,10 @@ namespace ResearchWork3.Calculation_CO
                     var tempExp = Math.Pow(Math.E,
                         2 *
                         Math.PI *
-                        InputCommonParameters.Hbar *
+                        InputCommonParameters.HBAR *
                         InputCommonParameters.C *
                         (entab[jj] - entab[ii]) /
-                        (InputCommonParameters.Kb * coTableX[el]));
+                        (InputCommonParameters.KB * coTableX[el]));
 
                     coTableY[el] = coTable[el][pos + 1] *
                                    (InputCommonParameters.G(jj) / InputCommonParameters.G(ii)) /
@@ -118,6 +125,26 @@ namespace ResearchWork3.Calculation_CO
             }
 
             return null;
+        }
+
+        public CubicSpline[][] GetCoCoeffMiniH()
+        {
+            return _coCoeffMiniH;
+        }
+
+        public CubicSpline[][] GetCoCoeffMiniH2Ortho()
+        {
+            return _coCoeffMiniH2Ortho;
+        }
+
+        public CubicSpline[][] GetCoCoeffMiniH2Para()
+        {
+            return _coCoeffMiniH2Para;
+        }
+
+        public CubicSpline[][] GetCoCoeffMiniHe()
+        {
+            return _coCoeffMiniHe;
         }
     }
 }

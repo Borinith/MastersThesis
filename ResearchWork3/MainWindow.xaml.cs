@@ -303,7 +303,7 @@ namespace ResearchWork3
             if (GridSystem.FindName("NLevelsValue") is IntegerUpDown nLevelsValue)
             {
                 nLevelsValue.Text = inputParametersOfSystem.NumberOfLevels.ToString();
-                nLevelsValue.Maximum = InputCommonParameters.MaxCoLevel;
+                nLevelsValue.Maximum = InputCommonParameters.MAX_CO_LEVEL;
                 nLevelsValue.IsEnabled = isEnabled;
             }
 
@@ -397,17 +397,17 @@ namespace ResearchWork3
         {
             #region Концентрация (n)
 
-            double.TryParse((GridSystem.FindName("NMinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("NMinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var nMinValue);
 
             inputParameters.NMin = nMinValue;
 
-            double.TryParse((GridSystem.FindName("NMaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("NMaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var nMaxValue);
 
             inputParameters.NMax = nMaxValue;
 
-            double.TryParse((GridSystem.FindName("NStepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("NStepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var nStepValue);
 
             inputParameters.NStep = nStepValue;
@@ -416,19 +416,19 @@ namespace ResearchWork3
 
             #region Кинетическая температура (Tkin)
 
-            double.TryParse((GridSystem.FindName("TemperatureKinMinValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureKinMinValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureKinMinValue);
 
             inputParameters.TemperatureKinMin = temperatureKinMinValue;
 
-            double.TryParse((GridSystem.FindName("TemperatureKinMaxValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureKinMaxValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureKinMaxValue);
 
             inputParameters.TemperatureKinMax = temperatureKinMaxValue;
 
-            double.TryParse((GridSystem.FindName("TemperatureKinStepValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureKinStepValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureKinStepValue);
 
@@ -438,19 +438,19 @@ namespace ResearchWork3
 
             #region Температура РИ (Tcmb)
 
-            double.TryParse((GridSystem.FindName("TemperatureCmbMinValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureCmbMinValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureCmbMinValue);
 
             inputParameters.TemperatureCmbMin = temperatureCmbMinValue;
 
-            double.TryParse((GridSystem.FindName("TemperatureCmbMaxValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureCmbMaxValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureCmbMaxValue);
 
             inputParameters.TemperatureCmbMax = temperatureCmbMaxValue;
 
-            double.TryParse((GridSystem.FindName("TemperatureCmbStepValue") as TextBox)?.Text,
+            decimal.TryParse((GridSystem.FindName("TemperatureCmbStepValue") as TextBox)?.Text,
                 NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
                 out var temperatureCmbStepValue);
 
@@ -460,17 +460,17 @@ namespace ResearchWork3
 
             #region Лучевая концентрация (N0)
 
-            double.TryParse((GridSystem.FindName("N0MinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("N0MinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var n0MinValue);
 
             inputParameters.N0Min = n0MinValue;
 
-            double.TryParse((GridSystem.FindName("N0MaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("N0MaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var n0MaxValue);
 
             inputParameters.N0Max = n0MaxValue;
 
-            double.TryParse((GridSystem.FindName("N0StepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
+            decimal.TryParse((GridSystem.FindName("N0StepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
                 CultureInfo.InvariantCulture, out var n0StepValue);
 
             inputParameters.N0Step = n0StepValue;

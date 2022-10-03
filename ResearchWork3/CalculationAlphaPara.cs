@@ -8,11 +8,20 @@ namespace ResearchWork3
     {
         //-------------------------------------Calculation AlphaPara of CO-------------------------------------
 
-        public readonly CubicSpline AlphaPara3;
+        private static readonly Lazy<CalculationAlphaPara> Lazy = new(() => new CalculationAlphaPara());
+
+        private CubicSpline _alphaPara3;
 
         public CalculationAlphaPara()
         {
-            var sizeTemperature = (int)Math.Round((200 - 1 + 0.1) / 0.1, 0); // Temperature from 1 to 200
+            Init();
+        }
+
+        public static CalculationAlphaPara Instance => Lazy.Value;
+
+        private void Init()
+        {
+            var sizeTemperature = Convert.ToInt32((200m - 1m + 0.1m) / 0.1m); // Temperature from 1 to 200
 
             var xValuesT = new double[sizeTemperature];
             var yValuesT = new double[sizeTemperature];
@@ -42,7 +51,7 @@ namespace ResearchWork3
                 yValuesT[i] = alphaPara2[i][1];
             }
 
-            AlphaPara3 = CubicSpline.InterpolateNaturalSorted(xValuesT, yValuesT);
+            _alphaPara3 = CubicSpline.InterpolateNaturalSorted(xValuesT, yValuesT);
         }
 
         private static double AlphaPara(double temperature)
@@ -52,14 +61,14 @@ namespace ResearchWork3
 
             for (var l = 0; l <= 1000; l += 2)
             {
-                var pow1 = Math.Pow(Math.E, -InputCommonParameters.Hbar * InputCommonParameters.Hbar * l * (l + 1) / (2 * InputCommonParameters.iii * InputCommonParameters.Kb * temperature));
+                var pow1 = Math.Pow(Math.E, -InputCommonParameters.HBAR * InputCommonParameters.HBAR * l * (l + 1) / (2 * InputCommonParameters.III * InputCommonParameters.KB * temperature));
 
                 sum1 += (2 * l + 1) * pow1;
             }
 
             for (var l = 1; l <= 1001; l += 2)
             {
-                var pow2 = Math.Pow(Math.E, -InputCommonParameters.Hbar * InputCommonParameters.Hbar * l * (l + 1) / (2 * InputCommonParameters.iii * InputCommonParameters.Kb * temperature));
+                var pow2 = Math.Pow(Math.E, -InputCommonParameters.HBAR * InputCommonParameters.HBAR * l * (l + 1) / (2 * InputCommonParameters.III * InputCommonParameters.KB * temperature));
 
                 sum2 += (2 * l + 1) * pow2;
             }
@@ -67,6 +76,11 @@ namespace ResearchWork3
             var beta = sum1 / (3 * sum2);
 
             return beta / (1 + beta);
+        }
+
+        public CubicSpline GetAlphaPara3()
+        {
+            return _alphaPara3;
         }
     }
 }
