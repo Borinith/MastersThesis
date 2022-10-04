@@ -57,10 +57,10 @@ namespace ResearchWork3.Calculation_CO
 
                         for (var temperatureCmb = inputParameters.TemperatureCmbMin; temperatureCmb <= inputParameters.TemperatureCmbMax; temperatureCmb += inputParameters.TemperatureCmbStep)
                         {
-                            var kin = temperatureKin;
-                            var cmb = temperatureCmb;
-                            var coeff = alphaParaCoeff;
-                            var n1 = n;
+                            var kinCopy = temperatureKin;
+                            var cmbCopy = temperatureCmb;
+                            var coeffCopy = alphaParaCoeff;
+                            var nCopy = n;
 
                             Parallel.For(
                                 (int)Math.Round(inputParameters.N0Min / inputParameters.N0Step, 0),
@@ -77,65 +77,7 @@ namespace ResearchWork3.Calculation_CO
 
                                     var n0 = Math.Round(n0Big * inputParameters.N0Step, inputParameters.N0Round);
 
-                                    var aTable = Aa(
-                                        inputParameters.NumberOfLevels,
-                                        InputTablesCo.Instance.GetEnergyTable(),
-                                        InputTablesCo.Instance.GetAEinTable(),
-                                        CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH(),
-                                        CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH2Ortho(),
-                                        CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH2Para(),
-                                        CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniHe(),
-                                        Convert.ToDouble(n1),
-                                        inputParameters.F,
-                                        Convert.ToDouble(kin),
-                                        Convert.ToDouble(cmb),
-                                        coeff);
-
-                                    var aMatrix = Matrix<double>.Build.DenseOfColumnArrays(aTable).Transpose();
-                                    var bVector = Vector<double>.Build.Dense(InitialData.GetB());
-                                    var xSolution = aMatrix.Solve(bVector);
-
-                                    var rotationLevelsTh = new double[inputParameters.NumberOfLevels];
-
-                                    for (var level = 0; level <= inputParameters.NumberOfLevels - 1; level++)
-                                    {
-                                        rotationLevelsTh[level] =
-                                            Math.Log10(xSolution[level] * Math.Pow(10, Convert.ToDouble(n0)) / xSolution[0]) -
-                                            Math.Log10(InputCommonParameters.G(level));
-                                    }
-
-                                    var dTemperatureKin = kin > inputParameters.TemperatureKinPr
-                                        ? inputParameters.DTemperatureKinMax
-                                        : inputParameters.DTemperatureKinMin;
-
-                                    var dn = n1 > inputParameters.NPr
-                                        ? inputParameters.DnMax
-                                        : inputParameters.DnMin;
-
-                                    double chi2 = 0;
-
-                                    for (var i = 0;
-                                         i <
-                                         Math.Min(inputParameters.DRotationLevelsPr.GetUpperBound(0) + 1,
-                                             inputParameters.NumberOfLevels);
-                                         i++)
-                                    {
-                                        chi2 += Math.Pow(
-                                            (rotationLevelsTh[i] - rotationLevelsPrG[i]) /
-                                            inputParameters.DRotationLevelsPr[i], 2);
-                                    }
-
-                                    chi2 += Math.Pow(Convert.ToDouble((kin - inputParameters.TemperatureKinPr) / dTemperatureKin), 2) +
-                                            Math.Pow(Convert.ToDouble((n1 - inputParameters.NPr) / dn), 2);
-
-                                    var chi2TableRow = new CalculateX2
-                                    {
-                                        N1 = n1,
-                                        Tkin = kin,
-                                        N0 = n0,
-                                        Tcmb = cmb,
-                                        X2 = chi2
-                                    };
+                                    var chi2TableRow = CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
 
                                     lock (chi2TableList)
                                     {
@@ -171,6 +113,76 @@ namespace ResearchWork3.Calculation_CO
             }, cancellationToken);
 
             return task;
+        }
+
+        private static CalculateX2 CalculateX2(
+            InputParametersOfSystem inputParameters,
+            decimal n0,
+            decimal nCopy,
+            decimal kinCopy,
+            decimal cmbCopy,
+            double coeffCopy,
+            IReadOnlyList<double> rotationLevelsPrG)
+        {
+            var aTable = Aa(
+                inputParameters.NumberOfLevels,
+                InputTablesCo.Instance.GetEnergyTable(),
+                InputTablesCo.Instance.GetAEinTable(),
+                CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH(),
+                CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH2Ortho(),
+                CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniH2Para(),
+                CalculationCollisionCoefficientsOfCo.Instance.GetCoCoeffMiniHe(),
+                Convert.ToDouble(nCopy),
+                inputParameters.F,
+                Convert.ToDouble(kinCopy),
+                Convert.ToDouble(cmbCopy),
+                coeffCopy);
+
+            var aMatrix = Matrix<double>.Build.DenseOfColumnArrays(aTable).Transpose();
+            var bVector = Vector<double>.Build.Dense(InitialData.GetB());
+            var xSolution = aMatrix.Solve(bVector);
+
+            var rotationLevelsTh = new double[inputParameters.NumberOfLevels];
+
+            for (var level = 0; level <= inputParameters.NumberOfLevels - 1; level++)
+            {
+                rotationLevelsTh[level] =
+                    Math.Log10(xSolution[level] * Math.Pow(10, Convert.ToDouble(n0)) / xSolution[0]) -
+                    Math.Log10(InputCommonParameters.G(level));
+            }
+
+            var dTemperatureKin = kinCopy > inputParameters.TemperatureKinPr
+                ? inputParameters.DTemperatureKinMax
+                : inputParameters.DTemperatureKinMin;
+
+            var dn = nCopy > inputParameters.NPr
+                ? inputParameters.DnMax
+                : inputParameters.DnMin;
+
+            double chi2 = 0;
+
+            for (var i = 0;
+                 i <
+                 Math.Min(inputParameters.DRotationLevelsPr.GetUpperBound(0) + 1,
+                     inputParameters.NumberOfLevels);
+                 i++)
+            {
+                chi2 += Math.Pow(
+                    (rotationLevelsTh[i] - rotationLevelsPrG[i]) /
+                    inputParameters.DRotationLevelsPr[i], 2);
+            }
+
+            chi2 += Math.Pow(Convert.ToDouble((kinCopy - inputParameters.TemperatureKinPr) / dTemperatureKin), 2) +
+                    Math.Pow(Convert.ToDouble((nCopy - inputParameters.NPr) / dn), 2);
+
+            return new CalculateX2
+            {
+                N1 = nCopy,
+                Tkin = kinCopy,
+                N0 = n0,
+                Tcmb = cmbCopy,
+                X2 = chi2
+            };
         }
 
         private static double[] CalculationRotationLevelsPr(IReadOnlyList<double> rotationLevelsPr)
