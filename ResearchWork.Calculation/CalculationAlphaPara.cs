@@ -1,16 +1,14 @@
 ﻿using MathNet.Numerics.Interpolation;
-using ResearchWork3.Input;
+using ResearchWork.IO.Input;
 using System;
 
-namespace ResearchWork3
+namespace ResearchWork.Calculation
 {
-    internal class CalculationAlphaPara
+    public class CalculationAlphaPara
     {
-        //-------------------------------------Calculation AlphaPara of CO-------------------------------------
-
         private static readonly Lazy<CalculationAlphaPara> Lazy = new(() => new CalculationAlphaPara());
 
-        private CubicSpline _alphaPara3;
+        private CubicSpline _alphaPara3 = null!;
 
         public CalculationAlphaPara()
         {

@@ -1,15 +1,13 @@
-﻿using ResearchWork3.Input;
+﻿using ResearchWork.IO.Input;
 using System;
 
-namespace ResearchWork3.Calculation_CO
+namespace ResearchWork.Calculation.CalculationCO
 {
     internal class CalculationCoLevels
     {
-        //----------------------------------------Calculation CO levels----------------------------------------
-
         private static readonly Lazy<CalculationCoLevels> Lazy = new(() => new CalculationCoLevels());
 
-        private double[][] _tabCoCoeff;
+        private double[][] _tabCoCoeff = null!;
 
         public CalculationCoLevels()
         {

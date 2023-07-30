@@ -1,7 +1,9 @@
-﻿using System;
+﻿// Ignore Spelling: Utils
+
+using System;
 using System.Diagnostics;
 
-namespace ResearchWork3.Calculation_CO
+namespace ResearchWork.Application.Utils
 {
     internal static class StopWatchUtils
     {

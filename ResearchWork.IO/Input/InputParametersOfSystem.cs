@@ -1,4 +1,4 @@
-﻿namespace ResearchWork3.Input
+﻿namespace ResearchWork.IO.Input
 {
     public class InputParametersOfSystem
     {

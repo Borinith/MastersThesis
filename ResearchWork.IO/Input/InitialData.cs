@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Linq;
 
-namespace ResearchWork3.Input
+namespace ResearchWork.IO.Input
 {
-    public class InitialData
+    public static class InitialData
     {
-        private static Lazy<double[]> _b;
-
-        public InitialData(int numberOfLevels)
-        {
-            Init(numberOfLevels);
-        }
+        private static Lazy<double[]>? _b;
 
         private static void Init(int numberOfLevels)
         {
@@ -23,9 +18,14 @@ namespace ResearchWork3.Input
             });
         }
 
-        public static double[] GetB()
+        public static double[] GetB(int numberOfLevels)
         {
-            return _b.Value;
+            if (_b == null || numberOfLevels != _b.Value.Length + 1)
+            {
+                Init(numberOfLevels);
+            }
+
+            return _b!.Value;
         }
     }
 }

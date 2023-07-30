@@ -1,25 +1,14 @@
-﻿using ResearchWork3.Calculation_CO;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ResearchWork3.Export
+﻿namespace ResearchWork.IO.Export
 {
     internal static class ExportTable
     {
-        public static Task ExportSortedTable(List<CalculateX2> sortedChi2Table, string exportName)
+        /*public static Task ExportSortedTable(List<CalculateX2> sortedChi2Table, string exportName)
         {
             var task = Task.Run(() =>
             {
-                //----------------------------------------Points in export-----------------------------------------
-
                 var customCulture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
                 customCulture.NumberFormat.NumberDecimalSeparator = ".";
                 Thread.CurrentThread.CurrentCulture = customCulture;
-
-                //---------------------------------------------Export----------------------------------------------
 
                 // ReSharper disable once ConvertToUsingDeclaration
 #pragma warning disable IDE0063 // Use simple 'using' statement
@@ -46,6 +35,6 @@ namespace ResearchWork3.Export
             });
 
             return task;
-        }
+        }*/
     }
 }

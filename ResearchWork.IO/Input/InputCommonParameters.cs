@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ResearchWork3.Input
+namespace ResearchWork.IO.Input
 {
     public static class InputCommonParameters
     {

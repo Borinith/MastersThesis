@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace ResearchWork3.Input
+namespace ResearchWork.IO.Input
 {
     public class InputTablesCo
     {
         private static readonly Lazy<InputTablesCo> Lazy = new(() => new InputTablesCo());
 
-        private double[] _aEinTable;
-        private double[] _energyTable;
-        private double[][] _h1Table2015;
-        private double[][] _h2TableOrtho2010;
-        private double[][] _h2TablePara2010;
-        private double[][] _heTable2002;
+        private double[] _aEinTable = null!;
+        private double[] _energyTable = null!;
+        private double[][] _h1Table2015 = null!;
+        private double[][] _h2TableOrtho2010 = null!;
+        private double[][] _h2TablePara2010 = null!;
+        private double[][] _heTable2002 = null!;
 
         public InputTablesCo()
         {

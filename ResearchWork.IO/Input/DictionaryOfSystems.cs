@@ -1,15 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace ResearchWork3.Input
+namespace ResearchWork.IO.Input
 {
     public class DictionaryOfSystems : InputParametersOfSystem
     {
-        private readonly Dictionary<string, InputParametersOfSystem> _systems =
-            new()
-            {
+        private static readonly Lazy<DictionaryOfSystems> Lazy = new(() => new DictionaryOfSystems());
+
+        private Dictionary<string, InputParametersOfSystem> _systemsDictionary = null!;
+
+        public DictionaryOfSystems()
+        {
+            Init();
+        }
+
+        public static DictionaryOfSystems Instance => Lazy.Value;
+
+        private void Init()
+        {
+            var systems =
+                new List<InputParametersOfSystem>
                 {
-                    "SDSS J1439+1117", new InputParametersOfSystem
+                    new()
                     {
                         SystemName = "SDSS J1439+1117",
                         RotationLevelsPr = new[]
@@ -46,10 +59,8 @@ namespace ResearchWork3.Input
                         N0Max = 13.29m,
                         N0Step = 0.001m,
                         N0Round = 3
-                    }
-                },
-                {
-                    "SDSS J1237+0647", new InputParametersOfSystem
+                    },
+                    new()
                     {
                         SystemName = "SDSS J1237+0647",
                         RotationLevelsPr = new[]
@@ -86,10 +97,8 @@ namespace ResearchWork3.Input
                         N0Max = 13.545m,
                         N0Step = 0.001m,
                         N0Round = 3
-                    }
-                },
-                {
-                    "SDSS J1047+2057", new InputParametersOfSystem
+                    },
+                    new()
                     {
                         SystemName = "SDSS J1047+2057",
                         RotationLevelsPr = new[]
@@ -126,10 +135,8 @@ namespace ResearchWork3.Input
                         N0Max = 14.4m,
                         N0Step = 0.005m,
                         N0Round = 3
-                    }
-                },
-                {
-                    "SDSS J0000+0048", new InputParametersOfSystem
+                    },
+                    new()
                     {
                         SystemName = "SDSS J0000+0048",
                         RotationLevelsPr = new[]
@@ -167,14 +174,16 @@ namespace ResearchWork3.Input
                         N0Step = 0.002m,
                         N0Round = 3
                     }
-                }
-            };
+                };
 
-        public InputParametersOfSystem System(string system)
+            _systemsDictionary = systems.ToDictionary(x => x.SystemName, x => x);
+        }
+
+        public InputParametersOfSystem GetSystem(string system)
         {
-            if (_systems.TryGetValue(system, out var value))
+            if (_systemsDictionary!.ContainsKey(system))
             {
-                return value;
+                return _systemsDictionary[system];
             }
 
             throw new Exception("Нет такой системы!");

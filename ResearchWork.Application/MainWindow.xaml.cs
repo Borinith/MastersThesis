@@ -1,7 +1,5 @@
-﻿using Microsoft.WindowsAPICodePack.Taskbar;
-using ResearchWork3.Calculation_CO;
-using ResearchWork3.Export;
-using ResearchWork3.Input;
+﻿using ResearchWork.Application.Utils;
+using ResearchWork.IO.Input;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,15 +9,14 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
-namespace ResearchWork3
+namespace ResearchWork.Application
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    // ReSharper disable once UnusedMember.Global
     public partial class MainWindow
     {
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource? _cancellationTokenSource;
 
         public MainWindow()
         {
@@ -72,7 +69,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(systemJ1439.Content.ToString(), systemJ1439);
+            result.Add(systemJ1439.Content.ToString()!, systemJ1439);
 
             var systemJ1237 = new Button
             {
@@ -83,7 +80,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(systemJ1237.Content.ToString(), systemJ1237);
+            result.Add(systemJ1237.Content.ToString()!, systemJ1237);
 
             var systemJ1047 = new Button
             {
@@ -94,7 +91,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(systemJ1047.Content.ToString(), systemJ1047);
+            result.Add(systemJ1047.Content.ToString()!, systemJ1047);
 
             var systemJ0000 = new Button
             {
@@ -105,7 +102,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(systemJ0000.Content.ToString(), systemJ0000);
+            result.Add(systemJ0000.Content.ToString()!, systemJ0000);
 
             var startButton = new Button
             {
@@ -116,7 +113,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(startButton.Content.ToString(), startButton);
+            result.Add(startButton.Content.ToString()!, startButton);
 
             var stopButton = new Button
             {
@@ -127,7 +124,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(stopButton.Content.ToString(), stopButton);
+            result.Add(stopButton.Content.ToString()!, stopButton);
 
             var backButton = new Button
             {
@@ -138,7 +135,7 @@ namespace ResearchWork3
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            result.Add(backButton.Content.ToString(), backButton);
+            result.Add(backButton.Content.ToString()!, backButton);
 
             return result;
         }
@@ -178,11 +175,10 @@ namespace ResearchWork3
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             GridButtons.Children.Clear();
-            var systems = new DictionaryOfSystems();
 
             if (sender is Button senderButton)
             {
-                var inputParameters = systems.System(senderButton.Content.ToString());
+                var inputParameters = DictionaryOfSystems.Instance.GetSystem(senderButton.Content.ToString() ?? string.Empty);
                 ParametersOfSystem(inputParameters, true);
             }
 
@@ -332,10 +328,9 @@ namespace ResearchWork3
         private async void ButtonSystemClickAsync(object sender, RoutedEventArgs e)
         {
             var senderButton = sender as Button;
-            var systems = new DictionaryOfSystems();
 
-            var systemName = (GridSystem.FindName("SystemName") as Label)?.Content.ToString();
-            var inputParameters = systems.System(systemName);
+            var systemName = (GridSystem.FindName("SystemName") as Label)?.Content.ToString() ?? string.Empty;
+            var inputParameters = DictionaryOfSystems.Instance.GetSystem(systemName);
 
             var newInputParameters = NewInputParametersOfSystem(inputParameters);
             CommonWindow.Children.Clear();
@@ -353,12 +348,15 @@ namespace ResearchWork3
 
                     _cancellationTokenSource = new CancellationTokenSource();
 
-                    var calculationX2 = await CalculationX2.CalculationX2Table(newInputParameters,
-                        _cancellationTokenSource.Token, progress, timeProgress);
+                    var calculationX2 = await StartCalculation.CalculationX2Table(
+                        newInputParameters,
+                        progress,
+                        timeProgress,
+                        _cancellationTokenSource.Token);
 
                     if (!_cancellationTokenSource.IsCancellationRequested)
                     {
-                        await ExportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
+                        //await ExportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
 
                         CommonWindow.Children.Clear();
 
@@ -373,7 +371,7 @@ namespace ResearchWork3
                     break;
 
                 case "Stop":
-                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource?.Cancel();
                     CommonWindow.Children.Clear();
 
                     ParametersOfSystem(newInputParameters, true);
@@ -390,7 +388,7 @@ namespace ResearchWork3
                     break;
             }
 
-            TaskbarManager.Instance.SetProgressValue(0, 100);
+            SetProgress.SetProgressValue(0, 100);
         }
 
         private InputParametersOfSystem NewInputParametersOfSystem(InputParametersOfSystem inputParameters)
@@ -484,7 +482,7 @@ namespace ResearchWork3
 
             inputParameters.NumberOfLevels = nLevelsValue;
 
-            inputParameters.ExportName = (GridSystem.FindName("FileNameValue") as TextBox)?.Text;
+            inputParameters.ExportName = (GridSystem.FindName("FileNameValue") as TextBox)?.Text ?? string.Empty;
 
             #endregion Количество уровней и имя файла
 

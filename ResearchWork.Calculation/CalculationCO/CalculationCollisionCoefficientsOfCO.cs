@@ -1,20 +1,18 @@
 ﻿using MathNet.Numerics.Interpolation;
-using ResearchWork3.Input;
+using ResearchWork.IO.Input;
 using System;
 using System.Collections.Generic;
 
-namespace ResearchWork3.Calculation_CO
+namespace ResearchWork.Calculation.CalculationCO
 {
     internal class CalculationCollisionCoefficientsOfCo
     {
-        //----------------------Calculation collision coefficients of CO with temperature----------------------
-
         private static readonly Lazy<CalculationCollisionCoefficientsOfCo> Lazy = new(() => new CalculationCollisionCoefficientsOfCo());
 
-        private CubicSpline[][] _coCoeffMiniH;
-        private CubicSpline[][] _coCoeffMiniH2Ortho;
-        private CubicSpline[][] _coCoeffMiniH2Para;
-        private CubicSpline[][] _coCoeffMiniHe;
+        private CubicSpline?[][] _coCoeffMiniH = null!;
+        private CubicSpline?[][] _coCoeffMiniH2Ortho = null!;
+        private CubicSpline?[][] _coCoeffMiniH2Para = null!;
+        private CubicSpline?[][] _coCoeffMiniHe = null!;
 
         public CalculationCollisionCoefficientsOfCo()
         {
@@ -54,7 +52,7 @@ namespace ResearchWork3.Calculation_CO
             }
         }
 
-        private static CubicSpline CoCoeff(int ii, int jj, double[][] tabCoCoeff, double[][] coTable,
+        private static CubicSpline? CoCoeff(int ii, int jj, double[][] tabCoCoeff, double[][] coTable,
             IReadOnlyList<double> entab)
         {
             if (ii > jj)
@@ -127,22 +125,22 @@ namespace ResearchWork3.Calculation_CO
             return null;
         }
 
-        public CubicSpline[][] GetCoCoeffMiniH()
+        public CubicSpline?[][] GetCoCoeffMiniH()
         {
             return _coCoeffMiniH;
         }
 
-        public CubicSpline[][] GetCoCoeffMiniH2Ortho()
+        public CubicSpline?[][] GetCoCoeffMiniH2Ortho()
         {
             return _coCoeffMiniH2Ortho;
         }
 
-        public CubicSpline[][] GetCoCoeffMiniH2Para()
+        public CubicSpline?[][] GetCoCoeffMiniH2Para()
         {
             return _coCoeffMiniH2Para;
         }
 
-        public CubicSpline[][] GetCoCoeffMiniHe()
+        public CubicSpline?[][] GetCoCoeffMiniHe()
         {
             return _coCoeffMiniHe;
         }

@@ -1,11 +1,11 @@
-﻿<Window x:Class="ResearchWork3.MainWindow"
+﻿<Window x:Class="ResearchWork.Application.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Research work 3" Height="400" Width="600">
+        Title="Research work" Height="400" Width="600">
     <Grid x:Name="CommonWindow">
         <Grid x:Name="GridButtons">
             <Grid.ColumnDefinitions>
@@ -375,7 +375,7 @@
                 Grid.Row="4"
                 Grid.Column="0" />
 
-            <toolkit:IntegerUpDown
+            <xctk:IntegerUpDown
                 Name="NLevelsValue"
                 Height="20"
                 Width="50"
