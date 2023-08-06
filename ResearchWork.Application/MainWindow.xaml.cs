@@ -1,4 +1,5 @@
-﻿using ResearchWork.Application.Utils;
+﻿using ResearchWork.Application.StartCalculation;
+using ResearchWork.Application.Utils;
 using ResearchWork.IO.Export;
 using ResearchWork.IO.Input;
 using ResearchWork.IO.Names;
@@ -19,11 +20,14 @@ namespace ResearchWork.Application
     public partial class MainWindow
     {
         private readonly IExportTable _exportTable;
+        private readonly IStartCalculation _startCalculation;
         private CancellationTokenSource? _cancellationTokenSource;
 
-        public MainWindow(IExportTable exportTable)
+        public MainWindow(IExportTable exportTable, IStartCalculation startCalculation)
         {
             _exportTable = exportTable;
+            _startCalculation = startCalculation;
+
             InitializeComponent();
             CommonWindow.Children.Clear();
             CreateButtons();
@@ -352,7 +356,7 @@ namespace ResearchWork.Application
 
                     _cancellationTokenSource = new CancellationTokenSource();
 
-                    var calculationX2 = await StartCalculation.CalculationX2Table(
+                    var calculationX2 = await _startCalculation.CalculationX2Table(
                         newInputParameters,
                         progress,
                         timeProgress,

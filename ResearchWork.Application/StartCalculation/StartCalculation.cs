@@ -10,11 +10,18 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ResearchWork.Application
+namespace ResearchWork.Application.StartCalculation
 {
-    public static class StartCalculation
+    public class StartCalculation : IStartCalculation
     {
-        public static Task<List<CalculateX2>> CalculationX2Table(
+        private readonly ICalculationX2 _calculationX2;
+
+        public StartCalculation(ICalculationX2 calculationX2)
+        {
+            _calculationX2 = calculationX2;
+        }
+
+        public Task<List<CalculateX2>> CalculationX2Table(
             InputParametersOfSystem inputParameters,
             IProgress<double> progress,
             IProgress<TimeSpan> timeProgress,
@@ -76,7 +83,7 @@ namespace ResearchWork.Application
 
                                     var n0 = Math.Round(n0Big * inputParameters.N0Step, inputParameters.N0Round);
 
-                                    var chi2TableRow = CalculationX2.CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
+                                    var chi2TableRow = _calculationX2.CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
 
                                     lock (chi2TableList)
                                     {
@@ -105,7 +112,7 @@ namespace ResearchWork.Application
 
                 var sortedChi2Table = chi2TableList.OrderBy(x => x.X2).ToList();
 
-                var chi2MinPlus1 = sortedChi2Table.FirstOrDefault()?.X2 + 1;
+                var chi2MinPlus1 = (sortedChi2Table.FirstOrDefault()?.X2 ?? 0) + 1;
 
                 return sortedChi2Table.Where(x => x.X2 <= chi2MinPlus1).ToList();
             }, cancellationToken);

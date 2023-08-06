@@ -2,7 +2,7 @@
 {
     public record CalculateX2
     {
-        public decimal N1 { get; init; }
+        public decimal N { get; init; }
 
         public decimal Tkin { get; init; }
 
