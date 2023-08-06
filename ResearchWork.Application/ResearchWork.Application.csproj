@@ -6,7 +6,17 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>ResearchWork.Application.Program</StartupObject>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Product>ResearchWork</Product>
+    <Authors>Cobra Commander</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
@@ -16,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ResearchWork.Calculation\ResearchWork.Calculation.csproj" />
-    <ProjectReference Include="..\ResearchWork.IO\ResearchWork.IO.csproj" />
   </ItemGroup>
 
 </Project>

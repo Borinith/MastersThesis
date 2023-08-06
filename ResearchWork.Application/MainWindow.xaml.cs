@@ -1,5 +1,7 @@
 ﻿using ResearchWork.Application.Utils;
+using ResearchWork.IO.Export;
 using ResearchWork.IO.Input;
+using ResearchWork.IO.Names;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,10 +18,12 @@ namespace ResearchWork.Application
     /// </summary>
     public partial class MainWindow
     {
+        private readonly IExportTable _exportTable;
         private CancellationTokenSource? _cancellationTokenSource;
 
-        public MainWindow()
+        public MainWindow(IExportTable exportTable)
         {
+            _exportTable = exportTable;
             InitializeComponent();
             CommonWindow.Children.Clear();
             CreateButtons();
@@ -31,25 +35,25 @@ namespace ResearchWork.Application
 
             var buttons = Buttons();
 
-            buttons.TryGetValue("SDSS J1439+1117", out var systemJ1439);
+            buttons.TryGetValue(SystemNames.SYSTEM_J1439, out var systemJ1439);
             Grid.SetRow(systemJ1439 ?? throw new InvalidOperationException(), 1);
             Grid.SetColumn(systemJ1439, 0);
             systemJ1439.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1439);
 
-            buttons.TryGetValue("SDSS J1237+0647", out var systemJ1237);
+            buttons.TryGetValue(SystemNames.SYSTEM_J1237, out var systemJ1237);
             Grid.SetRow(systemJ1237 ?? throw new InvalidOperationException(), 2);
             Grid.SetColumn(systemJ1237, 0);
             systemJ1237.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1237);
 
-            buttons.TryGetValue("SDSS J1047+2057", out var systemJ1047);
+            buttons.TryGetValue(SystemNames.SYSTEM_J1047, out var systemJ1047);
             Grid.SetRow(systemJ1047 ?? throw new InvalidOperationException(), 3);
             Grid.SetColumn(systemJ1047, 0);
             systemJ1047.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1047);
 
-            buttons.TryGetValue("SDSS J0000+0048", out var systemJ0000);
+            buttons.TryGetValue(SystemNames.SYSTEM_J0000, out var systemJ0000);
             Grid.SetRow(systemJ0000 ?? throw new InvalidOperationException(), 4);
             Grid.SetColumn(systemJ0000, 0);
             systemJ0000.Click += ButtonClick;
@@ -64,7 +68,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "SDSS J1439+1117",
+                Content = SystemNames.SYSTEM_J1439,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -75,7 +79,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "SDSS J1237+0647",
+                Content = SystemNames.SYSTEM_J1237,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -86,7 +90,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "SDSS J1047+2057",
+                Content = SystemNames.SYSTEM_J1047,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -97,7 +101,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "SDSS J0000+0048",
+                Content = SystemNames.SYSTEM_J0000,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -108,7 +112,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "Start",
+                Content = ButtonNames.START,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -119,7 +123,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "Stop",
+                Content = ButtonNames.STOP,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -130,7 +134,7 @@ namespace ResearchWork.Application
             {
                 Width = 120,
                 Height = 30,
-                Content = "Back",
+                Content = ButtonNames.BACK,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -144,9 +148,9 @@ namespace ResearchWork.Application
         {
             GridSystem.Children.OfType<Button>().ToList().ForEach(x => GridSystem.Children.Remove(x));
 
-            buttons.TryGetValue("Start", out var startButton);
-            buttons.TryGetValue("Back", out var backButton);
-            buttons.TryGetValue("Stop", out var stopButton);
+            buttons.TryGetValue(ButtonNames.START, out var startButton);
+            buttons.TryGetValue(ButtonNames.BACK, out var backButton);
+            buttons.TryGetValue(ButtonNames.STOP, out var stopButton);
 
             if (isStart)
             {
@@ -342,7 +346,7 @@ namespace ResearchWork.Application
 
             switch (senderButton?.Content.ToString())
             {
-                case "Start":
+                case ButtonNames.START:
                     ParametersOfSystem(newInputParameters, false);
                     ButtonsStartStopAndBack(Buttons(), false);
 
@@ -356,7 +360,7 @@ namespace ResearchWork.Application
 
                     if (!_cancellationTokenSource.IsCancellationRequested)
                     {
-                        //await ExportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
+                        await _exportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
 
                         CommonWindow.Children.Clear();
 
@@ -370,7 +374,7 @@ namespace ResearchWork.Application
 
                     break;
 
-                case "Stop":
+                case ButtonNames.STOP:
                     _cancellationTokenSource?.Cancel();
                     CommonWindow.Children.Clear();
 
@@ -381,7 +385,7 @@ namespace ResearchWork.Application
 
                     break;
 
-                case "Back":
+                case ButtonNames.BACK:
                     CommonWindow.Children.Clear();
                     CreateButtons();
 

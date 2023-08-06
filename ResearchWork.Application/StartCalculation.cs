@@ -2,6 +2,7 @@
 using ResearchWork.Calculation;
 using ResearchWork.Calculation.CalculationCO;
 using ResearchWork.IO.Input;
+using ResearchWork.IO.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace ResearchWork.Application
 {
     public static class StartCalculation
     {
-        public static Task<List<CalculateX2>?> CalculationX2Table(
+        public static Task<List<CalculateX2>> CalculationX2Table(
             InputParametersOfSystem inputParameters,
             IProgress<double> progress,
             IProgress<TimeSpan> timeProgress,
@@ -85,7 +86,7 @@ namespace ResearchWork.Application
 
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                return null;
+                                return new List<CalculateX2>();
                             }
 
                             chNumberOfX2 += (int)((inputParameters.N0Max -

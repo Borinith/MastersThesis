@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ResearchWork.IO.Export;
 using System;
 
 namespace ResearchWork.Application
@@ -14,6 +15,7 @@ namespace ResearchWork.Application
                        {
                            services.AddSingleton<App>();
                            services.AddSingleton<MainWindow>();
+                           services.AddTransient<IExportTable, ExportTable>();
                        })
                        .Build())
             {

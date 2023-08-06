@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 using ResearchWork.IO.Input;
+using ResearchWork.IO.Models;
 using System;
 using System.Collections.Generic;
 
@@ -205,18 +206,5 @@ namespace ResearchWork.Calculation.CalculationCO
 
             return aaaTab;
         }
-    }
-
-    public record CalculateX2
-    {
-        public decimal N1 { get; init; }
-
-        public decimal Tkin { get; init; }
-
-        public decimal N0 { get; init; }
-
-        public decimal Tcmb { get; init; }
-
-        public double X2 { get; init; }
     }
 }
