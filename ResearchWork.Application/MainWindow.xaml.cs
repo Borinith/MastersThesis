@@ -19,6 +19,7 @@ namespace ResearchWork.Application
     /// </summary>
     public partial class MainWindow
     {
+        private readonly IReadOnlyDictionary<string, Button> _buttons;
         private readonly IExportTable _exportTable;
         private readonly IStartCalculation _startCalculation;
         private CancellationTokenSource? _cancellationTokenSource;
@@ -30,6 +31,8 @@ namespace ResearchWork.Application
 
             InitializeComponent();
             CommonWindow.Children.Clear();
+
+            _buttons = Buttons();
             CreateButtons();
         }
 
@@ -37,34 +40,28 @@ namespace ResearchWork.Application
         {
             CommonWindow.Children.Add(GridButtons);
 
-            var buttons = Buttons();
-
-            buttons.TryGetValue(SystemNames.SYSTEM_J1439, out var systemJ1439);
+            _buttons.TryGetValue(SystemNames.SYSTEM_J1439, out var systemJ1439);
             Grid.SetRow(systemJ1439 ?? throw new InvalidOperationException(), 1);
             Grid.SetColumn(systemJ1439, 0);
-            systemJ1439.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1439);
 
-            buttons.TryGetValue(SystemNames.SYSTEM_J1237, out var systemJ1237);
+            _buttons.TryGetValue(SystemNames.SYSTEM_J1237, out var systemJ1237);
             Grid.SetRow(systemJ1237 ?? throw new InvalidOperationException(), 2);
             Grid.SetColumn(systemJ1237, 0);
-            systemJ1237.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1237);
 
-            buttons.TryGetValue(SystemNames.SYSTEM_J1047, out var systemJ1047);
+            _buttons.TryGetValue(SystemNames.SYSTEM_J1047, out var systemJ1047);
             Grid.SetRow(systemJ1047 ?? throw new InvalidOperationException(), 3);
             Grid.SetColumn(systemJ1047, 0);
-            systemJ1047.Click += ButtonClick;
             GridButtons.Children.Add(systemJ1047);
 
-            buttons.TryGetValue(SystemNames.SYSTEM_J0000, out var systemJ0000);
+            _buttons.TryGetValue(SystemNames.SYSTEM_J0000, out var systemJ0000);
             Grid.SetRow(systemJ0000 ?? throw new InvalidOperationException(), 4);
             Grid.SetColumn(systemJ0000, 0);
-            systemJ0000.Click += ButtonClick;
             GridButtons.Children.Add(systemJ0000);
         }
 
-        private static Dictionary<string, Button> Buttons()
+        private IReadOnlyDictionary<string, Button> Buttons()
         {
             var result = new Dictionary<string, Button>();
 
@@ -77,6 +74,8 @@ namespace ResearchWork.Application
                 VerticalAlignment = VerticalAlignment.Center
             };
 
+            systemJ1439.Click += ButtonClick;
+
             result.Add(systemJ1439.Content.ToString()!, systemJ1439);
 
             var systemJ1237 = new Button
@@ -87,6 +86,8 @@ namespace ResearchWork.Application
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
+            systemJ1237.Click += ButtonClick;
 
             result.Add(systemJ1237.Content.ToString()!, systemJ1237);
 
@@ -99,6 +100,8 @@ namespace ResearchWork.Application
                 VerticalAlignment = VerticalAlignment.Center
             };
 
+            systemJ1047.Click += ButtonClick;
+
             result.Add(systemJ1047.Content.ToString()!, systemJ1047);
 
             var systemJ0000 = new Button
@@ -109,6 +112,8 @@ namespace ResearchWork.Application
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
+            systemJ0000.Click += ButtonClick;
 
             result.Add(systemJ0000.Content.ToString()!, systemJ0000);
 
@@ -121,6 +126,8 @@ namespace ResearchWork.Application
                 VerticalAlignment = VerticalAlignment.Center
             };
 
+            startButton.Click += ButtonSystemClickAsync;
+
             result.Add(startButton.Content.ToString()!, startButton);
 
             var stopButton = new Button
@@ -131,6 +138,8 @@ namespace ResearchWork.Application
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
+
+            stopButton.Click += ButtonSystemClickAsync;
 
             result.Add(stopButton.Content.ToString()!, stopButton);
 
@@ -143,9 +152,11 @@ namespace ResearchWork.Application
                 VerticalAlignment = VerticalAlignment.Center
             };
 
+            backButton.Click += ButtonSystemClickAsync;
+
             result.Add(backButton.Content.ToString()!, backButton);
 
-            return result;
+            return result.AsReadOnly();
         }
 
         private void ButtonsStartStopAndBack(IReadOnlyDictionary<string, Button> buttons, bool isStart)
@@ -161,13 +172,11 @@ namespace ResearchWork.Application
                 Grid.SetColumnSpan(startButton ?? throw new InvalidOperationException(), 4);
                 Grid.SetRow(startButton, 6);
                 Grid.SetColumn(startButton, 4);
-                startButton.Click += ButtonSystemClickAsync;
                 GridSystem.Children.Add(startButton);
 
                 Grid.SetColumnSpan(backButton ?? throw new InvalidOperationException(), 4);
                 Grid.SetRow(backButton, 6);
                 Grid.SetColumn(backButton, 0);
-                backButton.Click += ButtonSystemClickAsync;
                 GridSystem.Children.Add(backButton);
             }
             else
@@ -175,7 +184,6 @@ namespace ResearchWork.Application
                 Grid.SetColumnSpan(stopButton ?? throw new InvalidOperationException(), 8);
                 Grid.SetRow(stopButton, 6);
                 Grid.SetColumn(stopButton, 0);
-                stopButton.Click += ButtonSystemClickAsync;
                 GridSystem.Children.Add(stopButton);
             }
         }
@@ -190,7 +198,7 @@ namespace ResearchWork.Application
                 ParametersOfSystem(inputParameters, true);
             }
 
-            ButtonsStartStopAndBack(Buttons(), true);
+            ButtonsStartStopAndBack(_buttons, true);
         }
 
         private void ParametersOfSystem(InputParametersOfSystem inputParametersOfSystem, bool isEnabled)
@@ -352,7 +360,7 @@ namespace ResearchWork.Application
             {
                 case ButtonNames.START:
                     ParametersOfSystem(newInputParameters, false);
-                    ButtonsStartStopAndBack(Buttons(), false);
+                    ButtonsStartStopAndBack(_buttons, false);
 
                     _cancellationTokenSource = new CancellationTokenSource();
 
@@ -369,7 +377,7 @@ namespace ResearchWork.Application
                         CommonWindow.Children.Clear();
 
                         ParametersOfSystem(newInputParameters, true);
-                        ButtonsStartStopAndBack(Buttons(), true);
+                        ButtonsStartStopAndBack(_buttons, true);
 
                         stopProgress.Report(100);
                     }
@@ -383,7 +391,7 @@ namespace ResearchWork.Application
                     CommonWindow.Children.Clear();
 
                     ParametersOfSystem(newInputParameters, true);
-                    ButtonsStartStopAndBack(Buttons(), true);
+                    ButtonsStartStopAndBack(_buttons, true);
 
                     _cancellationTokenSource?.Dispose();
 
