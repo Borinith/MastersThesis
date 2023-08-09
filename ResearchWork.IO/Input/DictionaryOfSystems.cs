@@ -179,14 +179,11 @@ namespace ResearchWork.IO.Input
             _systemsDictionary = systems.ToDictionary(x => x.SystemName, x => x);
         }
 
-        public InputParametersOfSystem GetSystem(string system)
+        public InputParametersOfSystem GetSystem(string systemName)
         {
-            if (_systemsDictionary.ContainsKey(system))
-            {
-                return _systemsDictionary[system];
-            }
-
-            throw new Exception("Нет такой системы!");
+            return _systemsDictionary.TryGetValue(systemName, out var system)
+                ? system
+                : throw new Exception("Нет такой системы!");
         }
     }
 }

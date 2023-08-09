@@ -12,6 +12,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 
+// ReSharper disable ConvertTypeCheckPatternToNullCheck
+
 namespace ResearchWork.Application
 {
     /// <summary>
@@ -19,6 +21,7 @@ namespace ResearchWork.Application
     /// </summary>
     public partial class MainWindow
     {
+        private const string TIME_PROGRESS_FORMAT = @"d\ hh\:mm\:ss";
         private readonly IReadOnlyDictionary<string, Button> _buttons;
         private readonly IExportTable _exportTable;
         private readonly IStartCalculation _startCalculation;
@@ -205,26 +208,30 @@ namespace ResearchWork.Application
         {
             CommonWindow.Children.Add(GridSystem);
 
-            if (GridSystem.FindName("SystemName") is Label systemName)
+            if (GridSystem.Children.OfType<Label>().FirstOrDefault(i => i.Tag?.ToString() == TextBoxNames.SYSTEM_NAME) is Label systemName)
             {
                 systemName.Content = inputParametersOfSystem.SystemName;
             }
 
+            var textBoxes = GridSystem.Children.OfType<TextBox>()
+                .Where(x => x.Tag != null)
+                .ToDictionary(x => x.Tag.ToString()!, x => x);
+
             #region Концентрация (n)
 
-            if (GridSystem.FindName("NMinValue") is TextBox nMinValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N_MIN_VALUE, out var nMinValue))
             {
                 nMinValue.Text = inputParametersOfSystem.NMin.ToString(CultureInfo.InvariantCulture);
                 nMinValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("NMaxValue") is TextBox nMaxValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N_MAX_VALUE, out var nMaxValue))
             {
                 nMaxValue.Text = inputParametersOfSystem.NMax.ToString(CultureInfo.InvariantCulture);
                 nMaxValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("NStepValue") is TextBox nStepValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N_STEP_VALUE, out var nStepValue))
             {
                 nStepValue.Text = inputParametersOfSystem.NStep.ToString(CultureInfo.InvariantCulture);
                 nStepValue.IsEnabled = isEnabled;
@@ -234,7 +241,7 @@ namespace ResearchWork.Application
 
             #region Кинетическая температура (Tkin)
 
-            if (GridSystem.FindName("TemperatureKinMinValue") is TextBox temperatureKinMinValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_MIN_VALUE, out var temperatureKinMinValue))
             {
                 temperatureKinMinValue.Text =
                     inputParametersOfSystem.TemperatureKinMin.ToString(CultureInfo.InvariantCulture);
@@ -242,7 +249,7 @@ namespace ResearchWork.Application
                 temperatureKinMinValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("TemperatureKinMaxValue") is TextBox temperatureKinMaxValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_MAX_VALUE, out var temperatureKinMaxValue))
             {
                 temperatureKinMaxValue.Text =
                     inputParametersOfSystem.TemperatureKinMax.ToString(CultureInfo.InvariantCulture);
@@ -250,7 +257,7 @@ namespace ResearchWork.Application
                 temperatureKinMaxValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("TemperatureKinStepValue") is TextBox temperatureKinStepValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_STEP_VALUE, out var temperatureKinStepValue))
             {
                 temperatureKinStepValue.Text =
                     inputParametersOfSystem.TemperatureKinStep.ToString(CultureInfo.InvariantCulture);
@@ -262,7 +269,7 @@ namespace ResearchWork.Application
 
             #region Температура РИ (Tcmb)
 
-            if (GridSystem.FindName("TemperatureCmbMinValue") is TextBox temperatureCmbMinValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_MIN_VALUE, out var temperatureCmbMinValue))
             {
                 temperatureCmbMinValue.Text =
                     inputParametersOfSystem.TemperatureCmbMin.ToString(CultureInfo.InvariantCulture);
@@ -270,7 +277,7 @@ namespace ResearchWork.Application
                 temperatureCmbMinValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("TemperatureCmbMaxValue") is TextBox temperatureCmbMaxValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_MAX_VALUE, out var temperatureCmbMaxValue))
             {
                 temperatureCmbMaxValue.Text =
                     inputParametersOfSystem.TemperatureCmbMax.ToString(CultureInfo.InvariantCulture);
@@ -278,7 +285,7 @@ namespace ResearchWork.Application
                 temperatureCmbMaxValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("TemperatureCmbStepValue") is TextBox temperatureCmbStepValue)
+            if (textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_STEP_VALUE, out var temperatureCmbStepValue))
             {
                 temperatureCmbStepValue.Text =
                     inputParametersOfSystem.TemperatureCmbStep.ToString(CultureInfo.InvariantCulture);
@@ -290,19 +297,19 @@ namespace ResearchWork.Application
 
             #region Лучевая концентрация (N0)
 
-            if (GridSystem.FindName("N0MinValue") is TextBox n0MinValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N0_MIN_VALUE, out var n0MinValue))
             {
                 n0MinValue.Text = inputParametersOfSystem.N0Min.ToString(CultureInfo.InvariantCulture);
                 n0MinValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("N0MaxValue") is TextBox n0MaxValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N0_MAX_VALUE, out var n0MaxValue))
             {
                 n0MaxValue.Text = inputParametersOfSystem.N0Max.ToString(CultureInfo.InvariantCulture);
                 n0MaxValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("N0StepValue") is TextBox n0StepValue)
+            if (textBoxes.TryGetValue(TextBoxNames.N0_STEP_VALUE, out var n0StepValue))
             {
                 n0StepValue.Text = inputParametersOfSystem.N0Step.ToString(CultureInfo.InvariantCulture);
                 n0StepValue.IsEnabled = isEnabled;
@@ -312,14 +319,14 @@ namespace ResearchWork.Application
 
             #region Количество уровней и имя файла
 
-            if (GridSystem.FindName("NLevelsValue") is IntegerUpDown nLevelsValue)
+            if (GridSystem.Children.OfType<IntegerUpDown>().FirstOrDefault(i => i.Tag?.ToString() == TextBoxNames.N_LEVELS_VALUE) is IntegerUpDown nLevelsValue)
             {
                 nLevelsValue.Text = inputParametersOfSystem.NumberOfLevels.ToString();
                 nLevelsValue.Maximum = InputCommonParameters.MAX_CO_LEVEL;
                 nLevelsValue.IsEnabled = isEnabled;
             }
 
-            if (GridSystem.FindName("FileNameValue") is TextBox fileNameValue)
+            if (textBoxes.TryGetValue(TextBoxNames.FILE_NAME_VALUE, out var fileNameValue))
             {
                 fileNameValue.Text = inputParametersOfSystem.ExportName;
                 fileNameValue.IsEnabled = isEnabled;
@@ -332,7 +339,7 @@ namespace ResearchWork.Application
             var progress = new Progress<double>(s => PbStatus.Value = s);
             var stopProgress = (IProgress<double>)progress;
 
-            var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(@"d\ hh\:mm\:ss"));
+            var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(TIME_PROGRESS_FORMAT));
             var timeStopProgress = (IProgress<TimeSpan>)timeProgress;
 
             stopProgress.Report(0);
@@ -345,63 +352,79 @@ namespace ResearchWork.Application
         {
             var senderButton = sender as Button;
 
-            var systemName = (GridSystem.FindName("SystemName") as Label)?.Content.ToString() ?? string.Empty;
-            var inputParameters = DictionaryOfSystems.Instance.GetSystem(systemName);
-
-            var newInputParameters = NewInputParametersOfSystem(inputParameters);
-            CommonWindow.Children.Clear();
-
-            var progress = new Progress<double>(s => PbStatus.Value = s);
-            var stopProgress = (IProgress<double>)progress;
-
-            var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(@"d\ hh\:mm\:ss"));
-
             switch (senderButton?.Content.ToString())
             {
                 case ButtonNames.START:
-                    ParametersOfSystem(newInputParameters, false);
-                    ButtonsStartStopAndBack(_buttons, false);
-
-                    _cancellationTokenSource = new CancellationTokenSource();
-
-                    var calculationX2 = await _startCalculation.CalculationX2Table(
-                        newInputParameters,
-                        progress,
-                        timeProgress,
-                        _cancellationTokenSource.Token);
-
-                    if (!_cancellationTokenSource.IsCancellationRequested)
-                    {
-                        await _exportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
-
-                        CommonWindow.Children.Clear();
-
-                        ParametersOfSystem(newInputParameters, true);
-                        ButtonsStartStopAndBack(_buttons, true);
-
-                        stopProgress.Report(100);
-                    }
-
-                    _cancellationTokenSource?.Dispose();
-
-                    break;
-
                 case ButtonNames.STOP:
-                    _cancellationTokenSource?.Cancel();
+                {
+                    var systemName = GridSystem.Children.OfType<Label>().FirstOrDefault(i => i.Tag?.ToString() == TextBoxNames.SYSTEM_NAME)?.Content.ToString() ?? string.Empty;
+                    var inputParameters = DictionaryOfSystems.Instance.GetSystem(systemName);
+
+                    var newInputParameters = NewInputParametersOfSystem(inputParameters);
                     CommonWindow.Children.Clear();
 
-                    ParametersOfSystem(newInputParameters, true);
-                    ButtonsStartStopAndBack(_buttons, true);
+                    switch (senderButton.Content.ToString())
+                    {
+                        case ButtonNames.START:
+                        {
+                            ParametersOfSystem(newInputParameters, false);
+                            ButtonsStartStopAndBack(_buttons, false);
 
-                    _cancellationTokenSource?.Dispose();
+                            _cancellationTokenSource = new CancellationTokenSource();
+
+                            var progress = new Progress<double>(s => PbStatus.Value = s);
+                            var stopProgress = (IProgress<double>)progress;
+                            var timeProgress = new Progress<TimeSpan>(s => TbTime.Content = s.ToString(TIME_PROGRESS_FORMAT));
+
+                            var calculationX2 = await _startCalculation.CalculationX2Table(
+                                newInputParameters,
+                                progress,
+                                timeProgress,
+                                _cancellationTokenSource.Token);
+
+                            if (!_cancellationTokenSource.IsCancellationRequested)
+                            {
+                                await _exportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
+
+                                CommonWindow.Children.Clear();
+
+                                ParametersOfSystem(newInputParameters, true);
+                                ButtonsStartStopAndBack(_buttons, true);
+
+                                stopProgress.Report(100);
+                            }
+
+                            _cancellationTokenSource?.Dispose();
+
+                            break;
+                        }
+
+                        case ButtonNames.STOP:
+                            _cancellationTokenSource?.Cancel();
+                            CommonWindow.Children.Clear();
+
+                            ParametersOfSystem(newInputParameters, true);
+                            ButtonsStartStopAndBack(_buttons, true);
+
+                            _cancellationTokenSource?.Dispose();
+
+                            break;
+
+                        default:
+                            throw new ArgumentException();
+                    }
 
                     break;
+                }
 
                 case ButtonNames.BACK:
                     CommonWindow.Children.Clear();
                     CreateButtons();
 
                     break;
+
+                default:
+                    throw new ArgumentException();
             }
 
             SetProgress.SetProgressValue(0, 100);
@@ -409,96 +432,120 @@ namespace ResearchWork.Application
 
         private InputParametersOfSystem NewInputParametersOfSystem(InputParametersOfSystem inputParameters)
         {
+            var textBoxes = GridSystem.Children.OfType<TextBox>()
+                .Where(x => x.Tag != null)
+                .ToDictionary(x => x.Tag.ToString()!, x => x);
+
             #region Концентрация (n)
 
-            decimal.TryParse((GridSystem.FindName("NMinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var nMinValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N_MIN_VALUE, out var nMinValue) ? nMinValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var nMinNumber);
 
-            inputParameters.NMin = nMinValue;
+            inputParameters.NMin = nMinNumber;
 
-            decimal.TryParse((GridSystem.FindName("NMaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var nMaxValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N_MAX_VALUE, out var nMaxValue) ? nMaxValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var nMaxNumber);
 
-            inputParameters.NMax = nMaxValue;
+            inputParameters.NMax = nMaxNumber;
 
-            decimal.TryParse((GridSystem.FindName("NStepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var nStepValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N_STEP_VALUE, out var nStepValue) ? nStepValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var nStepNumber);
 
-            inputParameters.NStep = nStepValue;
+            inputParameters.NStep = nStepNumber;
 
             #endregion Концентрация (n)
 
             #region Кинетическая температура (Tkin)
 
-            decimal.TryParse((GridSystem.FindName("TemperatureKinMinValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureKinMinValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_MIN_VALUE, out var temperatureKinMinValue) ? temperatureKinMinValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureKinMinNumber);
 
-            inputParameters.TemperatureKinMin = temperatureKinMinValue;
+            inputParameters.TemperatureKinMin = temperatureKinMinNumber;
 
-            decimal.TryParse((GridSystem.FindName("TemperatureKinMaxValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureKinMaxValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_MAX_VALUE, out var temperatureKinMaxValue) ? temperatureKinMaxValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureKinMaxNumber);
 
-            inputParameters.TemperatureKinMax = temperatureKinMaxValue;
+            inputParameters.TemperatureKinMax = temperatureKinMaxNumber;
 
-            decimal.TryParse((GridSystem.FindName("TemperatureKinStepValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureKinStepValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_KIN_STEP_VALUE, out var temperatureKinStepValue) ? temperatureKinStepValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureKinStepNumber);
 
-            inputParameters.TemperatureKinStep = temperatureKinStepValue;
+            inputParameters.TemperatureKinStep = temperatureKinStepNumber;
 
             #endregion Кинетическая температура (Tkin)
 
             #region Температура РИ (Tcmb)
 
-            decimal.TryParse((GridSystem.FindName("TemperatureCmbMinValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureCmbMinValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_MIN_VALUE, out var temperatureCmbMinValue) ? temperatureCmbMinValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureCmbMinNumber);
 
-            inputParameters.TemperatureCmbMin = temperatureCmbMinValue;
+            inputParameters.TemperatureCmbMin = temperatureCmbMinNumber;
 
-            decimal.TryParse((GridSystem.FindName("TemperatureCmbMaxValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureCmbMaxValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_MAX_VALUE, out var temperatureCmbMaxValue) ? temperatureCmbMaxValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureCmbMaxNumber);
 
-            inputParameters.TemperatureCmbMax = temperatureCmbMaxValue;
+            inputParameters.TemperatureCmbMax = temperatureCmbMaxNumber;
 
-            decimal.TryParse((GridSystem.FindName("TemperatureCmbStepValue") as TextBox)?.Text,
-                NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture,
-                out var temperatureCmbStepValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.TEMPERATURE_CMB_STEP_VALUE, out var temperatureCmbStepValue) ? temperatureCmbStepValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var temperatureCmbStepNumber);
 
-            inputParameters.TemperatureCmbStep = temperatureCmbStepValue;
+            inputParameters.TemperatureCmbStep = temperatureCmbStepNumber;
 
             #endregion Температура РИ (Tcmb)
 
             #region Лучевая концентрация (N0)
 
-            decimal.TryParse((GridSystem.FindName("N0MinValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var n0MinValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N0_MIN_VALUE, out var n0MinValue) ? n0MinValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var n0MinNumber);
 
-            inputParameters.N0Min = n0MinValue;
+            inputParameters.N0Min = n0MinNumber;
 
-            decimal.TryParse((GridSystem.FindName("N0MaxValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var n0MaxValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N0_MAX_VALUE, out var n0MaxValue) ? n0MaxValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var n0MaxNumber);
 
-            inputParameters.N0Max = n0MaxValue;
+            inputParameters.N0Max = n0MaxNumber;
 
-            decimal.TryParse((GridSystem.FindName("N0StepValue") as TextBox)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var n0StepValue);
+            decimal.TryParse(textBoxes.TryGetValue(TextBoxNames.N0_STEP_VALUE, out var n0StepValue) ? n0StepValue.Text : null,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var n0StepNumber);
 
-            inputParameters.N0Step = n0StepValue;
+            inputParameters.N0Step = n0StepNumber;
 
             #endregion Лучевая концентрация (N0)
 
             #region Количество уровней и имя файла
 
-            int.TryParse((GridSystem.FindName("NLevelsValue") as IntegerUpDown)?.Text, NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture, out var nLevelsValue);
+            int.TryParse(GridSystem.Children.OfType<IntegerUpDown>().FirstOrDefault(i => i.Tag?.ToString() == TextBoxNames.N_LEVELS_VALUE)?.Text,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out var nLevelsNumber);
 
-            inputParameters.NumberOfLevels = nLevelsValue;
+            inputParameters.NumberOfLevels = nLevelsNumber;
 
-            inputParameters.ExportName = (GridSystem.FindName("FileNameValue") as TextBox)?.Text ?? string.Empty;
+            inputParameters.ExportName = textBoxes.TryGetValue(TextBoxNames.FILE_NAME_VALUE, out var fileNameValue) ? fileNameValue.Text : string.Empty;
 
             #endregion Количество уровней и имя файла
 

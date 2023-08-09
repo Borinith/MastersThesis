@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:ResearchWork.Application"
         mc:Ignorable="d"
         Title="Research work" Height="400" Width="600">
     <Grid x:Name="CommonWindow">
@@ -44,7 +45,7 @@
             </Grid.RowDefinitions>
 
             <Label
-                Name="SystemName"
+                Tag="{x:Static local:TextBoxNames.SYSTEM_NAME}"
                 Visibility="Hidden" />
 
             <!--#region Концентрация (n)-->
@@ -71,7 +72,7 @@
                 Grid.Column="2" />
 
             <TextBox
-                Name="NMinValue"
+                Tag="{x:Static local:TextBoxNames.N_MIN_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -90,7 +91,7 @@
                 Grid.Column="4" />
 
             <TextBox
-                Name="NMaxValue"
+                Tag="{x:Static local:TextBoxNames.N_MAX_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -109,7 +110,7 @@
                 Grid.Column="6" />
 
             <TextBox
-                Name="NStepValue"
+                Tag="{x:Static local:TextBoxNames.N_STEP_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -143,7 +144,7 @@
                 Grid.Column="2" />
 
             <TextBox
-                Name="TemperatureKinMinValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_KIN_MIN_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -162,7 +163,7 @@
                 Grid.Column="4" />
 
             <TextBox
-                Name="TemperatureKinMaxValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_KIN_MAX_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -181,7 +182,7 @@
                 Grid.Column="6" />
 
             <TextBox
-                Name="TemperatureKinStepValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_KIN_STEP_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -215,7 +216,7 @@
                 Grid.Column="2" />
 
             <TextBox
-                Name="TemperatureCmbMinValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_CMB_MIN_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -234,7 +235,7 @@
                 Grid.Column="4" />
 
             <TextBox
-                Name="TemperatureCmbMaxValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_CMB_MAX_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -253,7 +254,7 @@
                 Grid.Column="6" />
 
             <TextBox
-                Name="TemperatureCmbStepValue"
+                Tag="{x:Static local:TextBoxNames.TEMPERATURE_CMB_STEP_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -287,7 +288,7 @@
                 Grid.Column="2" />
 
             <TextBox
-                Name="N0MinValue"
+                Tag="{x:Static local:TextBoxNames.N0_MIN_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -306,7 +307,7 @@
                 Grid.Column="4" />
 
             <TextBox
-                Name="N0MaxValue"
+                Tag="{x:Static local:TextBoxNames.N0_MAX_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -325,7 +326,7 @@
                 Grid.Column="6" />
 
             <TextBox
-                Name="N0StepValue"
+                Tag="{x:Static local:TextBoxNames.N0_STEP_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -376,7 +377,7 @@
                 Grid.Column="0" />
 
             <xctk:IntegerUpDown
-                Name="NLevelsValue"
+                Tag="{x:Static local:TextBoxNames.N_LEVELS_VALUE}"
                 Height="20"
                 Width="50"
                 HorizontalAlignment="Left"
@@ -399,7 +400,7 @@
                 Grid.Column="3" />
 
             <TextBox
-                Name="FileNameValue"
+                Tag="{x:Static local:TextBoxNames.FILE_NAME_VALUE}"
                 Height="20"
                 Width="200"
                 HorizontalAlignment="Left"
