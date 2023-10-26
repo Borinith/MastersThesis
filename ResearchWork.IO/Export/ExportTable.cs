@@ -31,11 +31,11 @@ namespace ResearchWork.IO.Export
                 }
 
                 sw.Write("{0:0.##}  \t\t{1}  \t{2:0.###} \t\t{3:0.##}  \t\t{4}",
-                    sortedChi2Table.LastOrDefault()?.N,
-                    sortedChi2Table.LastOrDefault()?.Tkin,
-                    sortedChi2Table.LastOrDefault()?.N0,
-                    sortedChi2Table.LastOrDefault()?.Tcmb,
-                    sortedChi2Table.LastOrDefault()?.X2);
+                    sortedChi2Table.LastOrDefault().N,
+                    sortedChi2Table.LastOrDefault().Tkin,
+                    sortedChi2Table.LastOrDefault().N0,
+                    sortedChi2Table.LastOrDefault().Tcmb,
+                    sortedChi2Table.LastOrDefault().X2);
             });
         }
     }

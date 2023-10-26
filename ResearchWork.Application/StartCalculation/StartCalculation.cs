@@ -112,7 +112,7 @@ namespace ResearchWork.Application.StartCalculation
 
                 var sortedChi2Table = chi2TableList.OrderBy(x => x.X2).ToList();
 
-                var chi2MinPlus1 = (sortedChi2Table.FirstOrDefault()?.X2 ?? 0) + 1;
+                var chi2MinPlus1 = sortedChi2Table.FirstOrDefault().X2 + 1;
 
                 return sortedChi2Table.Where(x => x.X2 <= chi2MinPlus1).ToList();
             }, cancellationToken);

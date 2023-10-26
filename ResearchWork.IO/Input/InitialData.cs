@@ -1,31 +1,31 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace ResearchWork.IO.Input
 {
     public static class InitialData
     {
-        private static Lazy<double[]>? _b;
+        private static readonly object Padlock = new();
+        private static double[]? _b;
 
-        private static void Init(int numberOfLevels)
+        private static double[] Init(int numberOfLevels)
         {
-            _b = new Lazy<double[]>(() =>
-            {
-                var b = Enumerable.Repeat(0d, numberOfLevels + 1).ToArray();
-                b[numberOfLevels] = 1;
+            var b = Enumerable.Repeat(0d, numberOfLevels + 1).ToArray();
+            b[numberOfLevels] = 1;
 
-                return b;
-            });
+            return b;
         }
 
         public static double[] GetB(int numberOfLevels)
         {
-            if (_b == null || numberOfLevels != _b.Value.Length + 1)
+            lock (Padlock)
             {
-                Init(numberOfLevels);
-            }
+                if (_b == null || _b.Length != numberOfLevels + 1)
+                {
+                    _b = Init(numberOfLevels);
+                }
 
-            return _b!.Value;
+                return _b;
+            }
         }
     }
 }

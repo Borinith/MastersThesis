@@ -1,15 +1,17 @@
 ﻿namespace ResearchWork.IO.Models
 {
-    public record CalculateX2
-    {
-        public decimal N { get; init; }
-
-        public decimal Tkin { get; init; }
-
-        public decimal N0 { get; init; }
-
-        public decimal Tcmb { get; init; }
-
-        public double X2 { get; init; }
-    }
+    /// <summary>
+    ///     Хи квадрат для данных значений
+    /// </summary>
+    /// <param name="N">Концентрация</param>
+    /// <param name="Tkin">Кинетическая температура</param>
+    /// <param name="N0">Лучевая концентрация</param>
+    /// <param name="Tcmb">Температура РИ</param>
+    /// <param name="X2">Хи квадрат</param>
+    public record struct CalculateX2(
+        decimal N,
+        decimal Tkin,
+        decimal N0,
+        decimal Tcmb,
+        double X2);
 }

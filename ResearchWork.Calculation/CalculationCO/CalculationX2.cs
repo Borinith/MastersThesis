@@ -67,14 +67,7 @@ namespace ResearchWork.Calculation.CalculationCO
             chi2 += Math.Pow(Convert.ToDouble((temperatureKin - inputParameters.TemperatureKinPr) / dTemperatureKin), 2) +
                     Math.Pow(Convert.ToDouble((n - inputParameters.NPr) / dn), 2);
 
-            return new CalculateX2
-            {
-                N = n,
-                Tkin = temperatureKin,
-                N0 = n0,
-                Tcmb = temperatureCmb,
-                X2 = chi2
-            };
+            return new CalculateX2(n, temperatureKin, n0, temperatureCmb, chi2);
         }
 
         private static double AEin(int ii, int jj, IReadOnlyList<double> aEintab)

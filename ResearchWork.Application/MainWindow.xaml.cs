@@ -428,6 +428,7 @@ namespace ResearchWork.Application
             }
 
             SetProgress.SetProgressValue(0, 100);
+            GC.Collect();
         }
 
         private InputParametersOfSystem NewInputParametersOfSystem(InputParametersOfSystem inputParameters)
