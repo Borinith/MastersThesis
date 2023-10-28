@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,24 +19,20 @@ namespace ResearchWork.IO.Export
                 customCulture.NumberFormat.NumberDecimalSeparator = ".";
                 Thread.CurrentThread.CurrentCulture = customCulture;
 
-                using var sw = new StreamWriter(exportName);
+                var sb = new StringBuilder();
 
-                for (var chExport = 0; chExport < sortedChi2Table.Count - 1; chExport++)
+                if (sortedChi2Table.Any())
                 {
-                    sw.WriteLine("{0:0.##}  \t\t{1}  \t{2:0.###} \t\t{3:0.##}  \t\t{4}",
-                        sortedChi2Table[chExport].N,
-                        sortedChi2Table[chExport].Tkin,
-                        sortedChi2Table[chExport].N0,
-                        sortedChi2Table[chExport].Tcmb,
-                        sortedChi2Table[chExport].X2);
+                    for (var chExport = 0; chExport < sortedChi2Table.Count - 1; chExport++)
+                    {
+                        sb.AppendLine($"{sortedChi2Table[chExport].N:0.##}  \t\t{sortedChi2Table[chExport].Tkin}  \t{sortedChi2Table[chExport].N0:0.###} \t\t{sortedChi2Table[chExport].Tcmb:0.##}  \t\t{sortedChi2Table[chExport].X2}");
+                    }
+
+                    sb.Append($"{sortedChi2Table.LastOrDefault().N:0.##}  \t\t{sortedChi2Table.LastOrDefault().Tkin}  \t{sortedChi2Table.LastOrDefault().N0:0.###} \t\t{sortedChi2Table.LastOrDefault().Tcmb:0.##}  \t\t{sortedChi2Table.LastOrDefault().X2}");
                 }
 
-                sw.Write("{0:0.##}  \t\t{1}  \t{2:0.###} \t\t{3:0.##}  \t\t{4}",
-                    sortedChi2Table.LastOrDefault().N,
-                    sortedChi2Table.LastOrDefault().Tkin,
-                    sortedChi2Table.LastOrDefault().N0,
-                    sortedChi2Table.LastOrDefault().Tcmb,
-                    sortedChi2Table.LastOrDefault().X2);
+                using var sw = new StreamWriter(exportName);
+                sw.Write(sb);
             });
         }
     }

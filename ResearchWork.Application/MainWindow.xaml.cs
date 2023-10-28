@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -428,7 +429,18 @@ namespace ResearchWork.Application
             }
 
             SetProgress.SetProgressValue(0, 100);
-            GC.Collect();
+            ReleaseMemory();
+        }
+
+        private static void ReleaseMemory()
+        {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+
+            for (var i = 0; i < 20; i++)
+            {
+                GC.WaitForPendingFinalizers();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            }
         }
 
         private InputParametersOfSystem NewInputParametersOfSystem(InputParametersOfSystem inputParameters)
