@@ -8,7 +8,7 @@
     /// <param name="N0">Лучевая концентрация</param>
     /// <param name="Tcmb">Температура РИ</param>
     /// <param name="X2">Хи квадрат</param>
-    public record struct CalculateX2(
+    public readonly record struct CalculateX2(
         decimal N,
         decimal Tkin,
         decimal N0,
