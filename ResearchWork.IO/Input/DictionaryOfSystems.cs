@@ -1,7 +1,7 @@
 ﻿using ResearchWork.IO.Names;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ResearchWork.IO.Input
 {
@@ -9,7 +9,7 @@ namespace ResearchWork.IO.Input
     {
         private static readonly Lazy<DictionaryOfSystems> Lazy = new(() => new DictionaryOfSystems());
 
-        private Dictionary<string, InputParametersOfSystem> _systemsDictionary = null!;
+        private FrozenDictionary<string, InputParametersOfSystem> _systemsDictionary = null!;
 
         public DictionaryOfSystems()
         {
@@ -176,7 +176,7 @@ namespace ResearchWork.IO.Input
                 }
             };
 
-            _systemsDictionary = systems.ToDictionary(x => x.SystemName, x => x);
+            _systemsDictionary = systems.ToFrozenDictionary(x => x.SystemName, x => x);
         }
 
         public InputParametersOfSystem GetSystem(string systemName)

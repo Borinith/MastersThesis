@@ -4,6 +4,7 @@ using ResearchWork.IO.Export;
 using ResearchWork.IO.Input;
 using ResearchWork.IO.Names;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace ResearchWork.Application
     public partial class MainWindow
     {
         private const string TIME_PROGRESS_FORMAT = @"d\ hh\:mm\:ss";
-        private readonly IReadOnlyDictionary<string, Button> _buttons;
+        private readonly FrozenDictionary<string, Button> _buttons;
         private readonly IExportTable _exportTable;
         private readonly IStartCalculation _startCalculation;
         private CancellationTokenSource? _cancellationTokenSource;
@@ -65,7 +66,7 @@ namespace ResearchWork.Application
             GridButtons.Children.Add(systemJ0000);
         }
 
-        private IReadOnlyDictionary<string, Button> Buttons()
+        private FrozenDictionary<string, Button> Buttons()
         {
             var result = new Dictionary<string, Button>();
 
@@ -160,10 +161,10 @@ namespace ResearchWork.Application
 
             result.Add(backButton.Content.ToString()!, backButton);
 
-            return result.AsReadOnly();
+            return result.ToFrozenDictionary();
         }
 
-        private void ButtonsStartStopAndBack(IReadOnlyDictionary<string, Button> buttons, bool isStart)
+        private void ButtonsStartStopAndBack(FrozenDictionary<string, Button> buttons, bool isStart)
         {
             GridSystem.Children.OfType<Button>().ToList().ForEach(x => GridSystem.Children.Remove(x));
 
