@@ -1,5 +1,4 @@
 ﻿using ResearchWork.IO.Models;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace ResearchWork.IO.Export
 {
     public class ExportTable : IExportTable
     {
-        public Task ExportSortedTable(List<CalculateX2> sortedChi2Table, string exportName)
+        public Task ExportSortedTable(CalculateX2[] sortedChi2Table, string exportName)
         {
             return Task.Run(() =>
             {
@@ -23,7 +22,7 @@ namespace ResearchWork.IO.Export
 
                 if (sortedChi2Table.Any())
                 {
-                    for (var chExport = 0; chExport < sortedChi2Table.Count - 1; chExport++)
+                    for (var chExport = 0; chExport < sortedChi2Table.Length - 1; chExport++)
                     {
                         sb.AppendLine($"{sortedChi2Table[chExport].N:0.##}  \t\t{sortedChi2Table[chExport].Tkin}  \t{sortedChi2Table[chExport].N0:0.###} \t\t{sortedChi2Table[chExport].Tcmb:0.##}  \t\t{sortedChi2Table[chExport].X2}");
                     }

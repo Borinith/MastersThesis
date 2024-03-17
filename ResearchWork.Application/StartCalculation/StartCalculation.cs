@@ -4,9 +4,11 @@ using ResearchWork.Calculation.CalculationCO;
 using ResearchWork.IO.Input;
 using ResearchWork.IO.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,13 +17,14 @@ namespace ResearchWork.Application.StartCalculation
     public class StartCalculation : IStartCalculation
     {
         private readonly ICalculationX2 _calculationX2;
+        private ConcurrentBag<CalculateX2>? _chi2Table;
 
         public StartCalculation(ICalculationX2 calculationX2)
         {
             _calculationX2 = calculationX2;
         }
 
-        public Task<List<CalculateX2>> CalculationX2Table(
+        public Task<CalculateX2[]> CalculationX2Table(
             InputParametersOfSystem inputParameters,
             IProgress<double> progress,
             IProgress<TimeSpan> timeProgress,
@@ -47,7 +50,7 @@ namespace ResearchWork.Application.StartCalculation
                       inputParameters.N0Step) /
                      inputParameters.N0Step), 0);
 
-                var chi2TableList = new List<CalculateX2>(lenChi2Table);
+                _chi2Table = new ConcurrentBag<CalculateX2>();
 
                 var chNumberOfX2 = 0; //Number of X2
 
@@ -85,15 +88,12 @@ namespace ResearchWork.Application.StartCalculation
 
                                     var chi2TableRow = _calculationX2.CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
 
-                                    lock (chi2TableList)
-                                    {
-                                        chi2TableList.Add(chi2TableRow);
-                                    }
+                                    _chi2Table.Add(chi2TableRow);
                                 });
 
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                return new List<CalculateX2>();
+                                return Array.Empty<CalculateX2>();
                             }
 
                             chNumberOfX2 += (int)((inputParameters.N0Max -
@@ -110,15 +110,26 @@ namespace ResearchWork.Application.StartCalculation
                     }
                 }
 
-                var chi2MinPlus1 = chi2TableList.Any()
-                    ? chi2TableList.Min(x => x.X2) + 1
+                var chi2MinPlus1 = _chi2Table.Any()
+                    ? _chi2Table.Min(x => x.X2) + 1
                     : 1;
 
-                return chi2TableList
+                return _chi2Table
                     .Where(x => x.X2 <= chi2MinPlus1)
                     .OrderBy(x => x.X2)
-                    .ToList();
+                    .ToArray();
             }, cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            _chi2Table = null;
+
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+            GC.WaitForPendingFinalizers();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
         }
 
         private static double[] CalculationRotationLevelsPr(IReadOnlyList<double> rotationLevelsPr)

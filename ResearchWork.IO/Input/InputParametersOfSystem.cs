@@ -1,14 +1,16 @@
-﻿namespace ResearchWork.IO.Input
+﻿// Ignore Spelling: Cmb
+
+namespace ResearchWork.IO.Input
 {
     public class InputParametersOfSystem
     {
-        public double[] DRotationLevelsPr;
+        public double[] DRotationLevelsPr = null!;
 
-        public double[] RotationLevelsPr;
+        public double[] RotationLevelsPr = null!;
 
-        public string SystemName { get; set; }
+        public string SystemName { get; set; } = null!;
 
-        public string ExportName { get; set; }
+        public string ExportName { get; set; } = null!;
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public double Z { get; set; }

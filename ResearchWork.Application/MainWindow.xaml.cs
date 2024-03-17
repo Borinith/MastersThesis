@@ -397,6 +397,7 @@ namespace ResearchWork.Application
                             }
 
                             _cancellationTokenSource?.Dispose();
+                            _startCalculation.Dispose();
 
                             break;
                         }
@@ -409,6 +410,7 @@ namespace ResearchWork.Application
                             ButtonsStartStopAndBack(_buttons, true);
 
                             _cancellationTokenSource?.Dispose();
+                            _startCalculation.Dispose();
 
                             break;
 
@@ -430,7 +432,7 @@ namespace ResearchWork.Application
             }
 
             SetProgress.SetProgressValue(0, 100);
-            ReleaseMemory();
+            //ReleaseMemory();
         }
 
         private static void ReleaseMemory()
@@ -439,8 +441,8 @@ namespace ResearchWork.Application
 
             for (var i = 0; i < 20; i++)
             {
-                GC.WaitForPendingFinalizers();
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+                GC.WaitForPendingFinalizers();
             }
         }
 

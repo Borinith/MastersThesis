@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: HBAR
+
+using System;
 
 namespace ResearchWork.IO.Input
 {

@@ -1,4 +1,6 @@
-﻿using MathNet.Numerics.Interpolation;
+﻿// Ignore Spelling: Cmb Coeff
+
+using MathNet.Numerics.Interpolation;
 using MathNet.Numerics.LinearAlgebra;
 using ResearchWork.IO.Input;
 using ResearchWork.IO.Models;
