@@ -25,13 +25,13 @@ namespace ResearchWork.Application
     {
         private const string TIME_PROGRESS_FORMAT = @"d\ hh\:mm\:ss";
         private readonly FrozenDictionary<string, Button> _buttons;
-        private readonly IExportTable _exportTable;
+        private readonly IExport _export;
         private readonly IStartCalculation _startCalculation;
         private CancellationTokenSource? _cancellationTokenSource;
 
-        public MainWindow(IExportTable exportTable, IStartCalculation startCalculation)
+        public MainWindow(IExport export, IStartCalculation startCalculation)
         {
-            _exportTable = exportTable;
+            _export = export;
             _startCalculation = startCalculation;
 
             InitializeComponent();
@@ -386,7 +386,7 @@ namespace ResearchWork.Application
 
                             if (!_cancellationTokenSource.IsCancellationRequested)
                             {
-                                await _exportTable.ExportSortedTable(calculationX2, newInputParameters.ExportName);
+                                await _export.ExportTable(calculationX2, newInputParameters.ExportName);
 
                                 CommonWindow.Children.Clear();
 
@@ -432,14 +432,14 @@ namespace ResearchWork.Application
             }
 
             SetProgress.SetProgressValue(0, 100);
-            //ReleaseMemory();
+            ReleaseMemory();
         }
 
         private static void ReleaseMemory()
         {
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 10; i++)
             {
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
                 GC.WaitForPendingFinalizers();

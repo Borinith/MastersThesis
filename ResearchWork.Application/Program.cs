@@ -20,7 +20,7 @@ namespace ResearchWork.Application
 
                            services.AddScoped<IStartCalculation, StartCalculation.StartCalculation>();
                            services.AddScoped<ICalculationX2, CalculationX2>();
-                           services.AddScoped<IExportTable, ExportTable>();
+                           services.AddScoped<IExport, Export>();
                        })
                        .Build())
             {

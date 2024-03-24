@@ -24,7 +24,7 @@ namespace ResearchWork.Application.StartCalculation
             _calculationX2 = calculationX2;
         }
 
-        public Task<CalculateX2[]> CalculationX2Table(
+        public Task<IEnumerable<CalculateX2>> CalculationX2Table(
             InputParametersOfSystem inputParameters,
             IProgress<double> progress,
             IProgress<TimeSpan> timeProgress,
@@ -56,6 +56,8 @@ namespace ResearchWork.Application.StartCalculation
 
                 var rotationLevelsPrG = CalculationRotationLevelsPr(inputParameters.RotationLevelsPr);
 
+                double chi2Min = 100;
+
                 var sw = new Stopwatch();
                 sw.Start();
 
@@ -75,6 +77,7 @@ namespace ResearchWork.Application.StartCalculation
                             Parallel.For(
                                 (int)Math.Round(inputParameters.N0Min / inputParameters.N0Step, 0),
                                 (int)Math.Round(inputParameters.N0Max / inputParameters.N0Step, 0) + 1,
+                                new ParallelOptions { MaxDegreeOfParallelism = 10 },
                                 (n0Big, state) =>
                                 {
                                     if (cancellationToken.IsCancellationRequested)
@@ -88,12 +91,20 @@ namespace ResearchWork.Application.StartCalculation
 
                                     var chi2TableRow = _calculationX2.CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
 
-                                    _chi2Table.Add(chi2TableRow);
+                                    if (chi2TableRow.X2 < chi2Min)
+                                    {
+                                        chi2Min = chi2TableRow.X2;
+                                    }
+
+                                    if (chi2TableRow.X2 <= chi2Min + 1)
+                                    {
+                                        _chi2Table.Add(chi2TableRow);
+                                    }
                                 });
 
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                return Array.Empty<CalculateX2>();
+                                return Enumerable.Empty<CalculateX2>();
                             }
 
                             chNumberOfX2 += (int)((inputParameters.N0Max -
@@ -110,14 +121,10 @@ namespace ResearchWork.Application.StartCalculation
                     }
                 }
 
-                var chi2MinPlus1 = _chi2Table.Any()
-                    ? _chi2Table.Min(x => x.X2) + 1
-                    : 1;
-
                 return _chi2Table
-                    .Where(x => x.X2 <= chi2MinPlus1)
+                    .Where(x => x.X2 <= chi2Min + 1)
                     .OrderBy(x => x.X2)
-                    .ToArray();
+                    .AsEnumerable();
             }, cancellationToken);
         }
 
