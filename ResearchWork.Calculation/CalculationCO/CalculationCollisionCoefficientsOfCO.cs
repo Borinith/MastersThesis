@@ -61,7 +61,7 @@ namespace ResearchWork.Calculation.CalculationCO
 
                 for (var k = 0; k < tabCoCoeff.GetUpperBound(0) + 1; k++)
                 {
-                    if ((int)Math.Round(tabCoCoeff[k][0]) == ii && (int)Math.Round(tabCoCoeff[k][1]) == jj)
+                    if ((int)Math.Round(tabCoCoeff[k][0], MidpointRounding.AwayFromZero) == ii && (int)Math.Round(tabCoCoeff[k][1], MidpointRounding.AwayFromZero) == jj)
                     {
                         pos = k;
 
@@ -89,7 +89,7 @@ namespace ResearchWork.Calculation.CalculationCO
 
                 for (var k = 0; k < tabCoCoeff.GetUpperBound(0) + 1; k++)
                 {
-                    if ((int)Math.Round(tabCoCoeff[k][0]) == jj && (int)Math.Round(tabCoCoeff[k][1]) == ii)
+                    if ((int)Math.Round(tabCoCoeff[k][0], MidpointRounding.AwayFromZero) == jj && (int)Math.Round(tabCoCoeff[k][1], MidpointRounding.AwayFromZero) == ii)
                     {
                         pos = k;
 

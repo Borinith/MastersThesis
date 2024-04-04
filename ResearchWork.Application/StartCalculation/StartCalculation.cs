@@ -48,7 +48,7 @@ namespace ResearchWork.Application.StartCalculation
                     ((inputParameters.N0Max -
                       inputParameters.N0Min +
                       inputParameters.N0Step) /
-                     inputParameters.N0Step), 0);
+                     inputParameters.N0Step), 0, MidpointRounding.AwayFromZero);
 
                 _chi2Table = new ConcurrentBag<CalculateX2>();
 
@@ -75,8 +75,8 @@ namespace ResearchWork.Application.StartCalculation
                             var nCopy = n;
 
                             Parallel.For(
-                                (int)Math.Round(inputParameters.N0Min / inputParameters.N0Step, 0),
-                                (int)Math.Round(inputParameters.N0Max / inputParameters.N0Step, 0) + 1,
+                                (int)Math.Round(inputParameters.N0Min / inputParameters.N0Step, 0, MidpointRounding.AwayFromZero),
+                                (int)Math.Round(inputParameters.N0Max / inputParameters.N0Step, 0, MidpointRounding.AwayFromZero) + 1,
                                 new ParallelOptions { MaxDegreeOfParallelism = 10 },
                                 (n0Big, state) =>
                                 {
@@ -87,7 +87,7 @@ namespace ResearchWork.Application.StartCalculation
                                         return;
                                     }
 
-                                    var n0 = Math.Round(n0Big * inputParameters.N0Step, inputParameters.N0Round);
+                                    var n0 = Math.Round(n0Big * inputParameters.N0Step, inputParameters.N0Round, MidpointRounding.AwayFromZero);
 
                                     var chi2TableRow = _calculationX2.CalculateX2(inputParameters, n0, nCopy, kinCopy, cmbCopy, coeffCopy, rotationLevelsPrG);
 
