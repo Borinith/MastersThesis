@@ -12,22 +12,25 @@ namespace ResearchWork.Application
         [STAThread]
         public static void Main()
         {
-            using (var host = Host.CreateDefaultBuilder()
-                       .ConfigureServices(services =>
-                       {
-                           services.AddSingleton<App>();
-                           services.AddSingleton<MainWindow>();
+            // Создаем билдер
+            var builder = Host.CreateApplicationBuilder();
 
-                           services.AddScoped<IStartCalculation, StartCalculation.StartCalculation>();
-                           services.AddScoped<ICalculationX2, CalculationX2>();
-                           services.AddScoped<IExport, Export>();
-                       })
-                       .Build())
-            {
-                var app = host.Services.GetService<App>();
+            // Внедряем сервисы
+            builder.Services.AddSingleton<App>();
+            builder.Services.AddSingleton<MainWindow>();
 
-                app?.Run();
-            }
+            builder.Services.AddScoped<IStartCalculation, StartCalculation.StartCalculation>();
+            builder.Services.AddScoped<ICalculationX2, CalculationX2>();
+            builder.Services.AddScoped<IExport, Export>();
+
+            // Создаем хост приложения
+            using var host = builder.Build();
+
+            // Получаем сервис - объект класса App
+            var app = host.Services.GetService<App>();
+
+            // Запускаем приложение
+            app?.Run();
         }
     }
 }
